@@ -1,7 +1,7 @@
 import discord
 import json
 import sql_handler
-config = json.load(open('../config.json'))
+config = json.load(open('config.json'))
 
 client = discord.Client()
 
