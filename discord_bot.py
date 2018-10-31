@@ -1,6 +1,7 @@
 import discord
 import json
 import sql_handler
+import sheets_interface
 config = json.load(open('config.json'))
 
 client = discord.Client()
@@ -24,7 +25,9 @@ async def on_message(message):
     #delvelopement channel is 385506783919079425
     if message.content.startswith('!tag ') and message.channel.id == '406292711646167045':
         await give_tag(message)
-
+    if message.content.startswith('test') and message.channel.id == '385506783919079425':
+        print('hello')
+        sheets_interface.main
 
 # TODO: implement on error function to log the error and prompt user to contact me or moderator
 # @client.event
@@ -44,10 +47,8 @@ async def give_tag(message):
             await client.send_message(message.channel, 'Enjoy your stay :grinning:')
             return
         else:
-            await client.send_message(message.channel,
-                                      'You need to register first , https://goo.gl/forms/phEbKvQzTi6MlIQ12 . '
-                                      '\n If you have already registered then wait a few minutes and try again, '
-                                      'if the issue still persists, then contact OZoneGuy or the server mods to resolve the issue.')
+            await client.send_message(message.channel, 'You need to register first , https://goo.gl/forms/phEbKvQzTi6MlIQ12 . \n If you have already registered then wait a few minutes and try again, if the issue still persists, then contact OZoneGuy or the server mods to resolve the issue.')
+            sheets_interface.main
             return
     if "McMaster Student".lower() in [y.name.lower() for y in author.roles]:
         if role is not None:
