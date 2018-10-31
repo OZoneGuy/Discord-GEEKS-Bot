@@ -21,7 +21,8 @@ async def on_message(message):
         return
 
     # real is is 406292711646167045
-    if message.content.startswith('!tag ') and message.channel.id == '385506783919079425':
+    #delvelopement channel is 385506783919079425
+    if message.content.startswith('!tag ') and message.channel.id == '406292711646167045':
         await give_tag(message)
 
 
