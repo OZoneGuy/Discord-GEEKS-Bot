@@ -7,7 +7,7 @@ import sql_handler
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 config = json.load(open('config.json'))
 
-sheet_ID = config['sheet_id_test']
+sheet_ID = config['sheet_id']
 sheet_range = 'A2:F'
 
 
@@ -27,8 +27,11 @@ def main():
         print('No data found.')
     else:
         for row in values:
-            sql_handler.insert_form_response(row[0], row[1], row[2], row[3], True if row[4] is 'Male' else False,
-                                             row[5])
+            try:
+                sql_handler.insert_form_response(row[0], row[1], row[2], True if row[3] is 'Yes' else False, row[4], row[5])
+            except:
+                print('error')
+
             pass
 
 
