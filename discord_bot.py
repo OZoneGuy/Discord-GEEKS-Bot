@@ -47,7 +47,7 @@ async def give_tag(message):
             await client.send_message(message.channel,
                                       'You need to register first , https://goo.gl/forms/phEbKvQzTi6MlIQ12 . '
                                       '\n If you have already registered then wait a few minutes and try again, '
-                                      'if the issue still persists, then contact OZoneGuy or the server mods.')
+                                      'if the issue still persists, then contact OZoneGuy or the server mods to resolve the issue.')
             return
     if "McMaster Student".lower() in [y.name.lower() for y in author.roles]:
         if role is not None:
