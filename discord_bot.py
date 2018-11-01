@@ -42,6 +42,7 @@ async def give_tag(message):
         await client.send_message(message.channel, 'You do not have permission to get this role.')
         return
     if role_string == 'McMaster Student':
+        sheets_interface.main
         if sql_handler.is_registered(author.name):
             await client.add_roles(author, role)
             await client.send_message(message.channel, 'Enjoy your stay :grinning:')
