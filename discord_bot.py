@@ -25,6 +25,8 @@ async def on_message(message):
     #delvelopement channel is 385506783919079425
     if message.content.startswith('!tag ') and message.channel.id == '406292711646167045':
         await give_tag(message)
+    if message.content.startswith('hello') and message.channel.id == '385506783919079425':
+        await client.send_message(message.channel, 'Hello to you too!')
     if message.content.startswith('test') and message.channel.id == '385506783919079425':
         print('hello')
         sheets_interface.main
