@@ -27,7 +27,7 @@ async def on_message(message):
         await register(message)
     if message.content.startswith('!tag ') and message.channel.id == '406292711646167045':
         await give_tag(message)
-    if message.content.startswith('hello') and message.channel.id == '385506783919079425':
+    if message.content.startswith('!hello') and message.channel.id == '385506783919079425':
         await client.send_message(message.channel, 'Hello to you too!')
     if message.content.startswith('test') and message.channel.id == '385506783919079425':
         print('hello')
@@ -40,14 +40,14 @@ async def on_message(message):
 
 async def register(message):
     sheets_interface.main
-        if sql_handler.is_registered(author.name):
-            await client.add_roles(author, role)
-            await client.send_message(message.channel, 'Enjoy your stay :grinning:')
-            return
-        else:
-            await client.send_message(message.channel, 'You need to register first , https://goo.gl/forms/phEbKvQzTi6MlIQ12 . \n If you have already registered then wait a few minutes and try again, if the issue still persists, then contact OZoneGuy or the server mods to resolve the issue.')
-            sheets_interface.main
-            return
+    if sql_handler.is_registered(author.name):
+        await client.add_roles(author, role)
+        await client.send_message(message.channel, 'Enjoy your stay :grinning:')
+        return
+    else:
+        await client.send_message(message.channel, 'You need to register first , https://goo.gl/forms/phEbKvQzTi6MlIQ12 . \n If you have already registered then wait a few minutes and try again, if the issue still persists, then contact OZoneGuy or the server mods to resolve the issue.')
+        sheets_interface.main
+        return
 
 async def give_tag(message):
     role_string = message.content[5:]
