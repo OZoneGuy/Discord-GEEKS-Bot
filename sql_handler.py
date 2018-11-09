@@ -47,4 +47,9 @@ def insert_form_response(time, user_name, name_prog, alumni, interests, email):
 
 def is_registered(user_name):
     _cursor.execute('SELECT * FROM form_responses WHERE discord_name = \'{}\''.format(user_name))
-    return len(_cursor.fetchall()) > 0
+    if len(_cursor.fetchall()) > 0:
+        return True
+    else:
+        name = user_name.split('#')[1]
+        _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'%{}\''.format(name))
+        return len(_cursor.fetchall) > 0
