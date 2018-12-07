@@ -9,6 +9,9 @@ client = discord.Client()
 forbidden_roles = ['PRISON WARDENS', 'GEEKS Exec', 'Vault Exec', 'Community Moderator', 'Seasoned Veterans',
                    'Vault Hunters', 'McMaster GEEKS Role Bot', 'Bot Army']
 
+reg_channel = '406292711646167045'
+dev_channel = '385506783919079425'
+com_channel = '520680784help949018639'
 
 @client.event
 async def on_ready():
@@ -21,23 +24,20 @@ async def on_message(message):
     if message.author is client.user:
         return
 
-    # real is is 406292711646167045
-    #delvelopement channel is 385506783919079425
-
     #registers the user
-    if message.content.startswith('!register') and (message.channel.id == '406292711646167045' or message.channel.id == '520680784949018639'):
+    if message.content.startswith('!register') and (message.channel.id == reg_channel or message.channel.id == com_channel):
         await register(message)
     #adds tag to the user
-    if message.content.startswith('!tag ') and (message.channel.id == '520680784949018639'):
+    if message.content.startswith('!tag ') and message.channel.id == com_channel:
         await give_tag(message)
 
     #gives all commands user can use
-    if message.content.startswith('!help') and (message.channel.id == '520680784949018639' or message.channel.id == '385506783919079425'):
+    if message.content.startswith('!botcommands') and (message.channel.id == com_channel or message.channel.id == dev_channel):
         await client.send_message(message.channel, 'To register use:\n\t\'!register\'\nTo get a tag use:\n\t\'!tag TAG_NAME\'\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
 
-    if message.content.startswith('!hello') and message.channel.id == '385506783919079425':
+    if message.content.startswith('!hello') and message.channel.id == dev_channel:
         await client.send_message(message.channel, 'Hello to \n you too!')
-    if message.content.startswith('test') and message.channel.id == '385506783919079425':
+    if message.content.startswith('test') and message.channel.id == dev_channel:
         print('hello')
         sheets_interface.main
 
