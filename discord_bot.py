@@ -36,7 +36,7 @@ async def on_message(message):
         await client.send_message(message.channel, 'To register use:\n\t`!register`\nTo get a tag use:\n\t`!tag TAG_NAME`\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
 
     if message.content.startswith('!hello') and message.channel.id == dev_channel:
-        await client.send_message(message.channel, 'Hello to \n you too!')
+        await client.send_message(message.channel, 'Hello to you too!')
     if message.content.startswith('test') and message.channel.id == dev_channel:
         print('hello')
         sheets_interface.main
