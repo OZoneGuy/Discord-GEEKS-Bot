@@ -25,13 +25,16 @@ async def on_message(message):
     #delvelopement channel is 385506783919079425
 
     #registers the user
-    if message.content.startswith('!register ') and message.channel.id == '406292711646167045':
+    if message.content.startswith('!register') and (message.channel.id == '406292711646167045' or message.channel.id == '520680784949018639'):
         await register(message)
     #adds tag to the user
-    if message.content.startswith('!tag ') and message.channel.id == '406292711646167045':
+    if message.content.startswith('!tag ') and (message.channel.id == '520680784949018639'):
         await give_tag(message)
-    if message.content.startswith('!help') and message.channel.id == '406292711646167045':
-        await client.send_message(message.channel, 'To register use:\n\t\'!register\'\nTo get a tag use:\n\t\'!tag TAG_NAME\'')
+
+    #gives all commands user can use
+    if message.content.startswith('!help') and (message.channel.id == '520680784949018639' or message.channel.id == '385506783919079425'):
+        await client.send_message(message.channel, 'To register use:\n\t\'!register\'\nTo get a tag use:\n\t\'!tag TAG_NAME\'\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
+
     if message.content.startswith('!hello') and message.channel.id == '385506783919079425':
         await client.send_message(message.channel, 'Hello to \n you too!')
     if message.content.startswith('test') and message.channel.id == '385506783919079425':
