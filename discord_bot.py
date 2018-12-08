@@ -11,7 +11,7 @@ forbidden_roles = ['PRISON WARDENS', 'GEEKS Exec', 'Vault Exec', 'Community Mode
 
 reg_channel = '406292711646167045'
 dev_channel = '385506783919079425'
-com_channel = '520680784help949018639'
+com_channel = '520680784949018639'
 
 @client.event
 async def on_ready():
