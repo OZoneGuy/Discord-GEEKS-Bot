@@ -41,9 +41,7 @@ async def on_message(message):
     if message.content.startswith('!hello') and message.channel.id == dev_channel:
         await client.send_message(message.channel, 'Hello to you too!')
     if message.content.startswith('test') and message.channel.id == dev_channel:
-        print('hello')
-        print('378272843856871445')
-        print(message.server.id)
+        print('updating DB')
         sheets_interface.main
 
 # TODO: implement on error function to log the error and prompt user to contact me or moderator
