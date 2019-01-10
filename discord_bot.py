@@ -4,6 +4,7 @@ import sql_handler
 import sheets_interface
 config = json.load(open('config.json'))
 
+#bot client
 client = discord.Client()
 
 forbidden_roles = ['PRISON WARDENS', 'GEEKS Exec', 'Vault Exec', 'Community Moderator', 'Seasoned Veterans',
@@ -21,6 +22,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+
+    #ignores messages sned by the bot
     if message.author is client.user:
         return
 
@@ -32,7 +35,7 @@ async def on_message(message):
         await give_tag(message)
 
     #gives all commands user can use
-    if message.content.startswith('!botcommands') and (message.channel.id == com_channel or message.channel.id == dev_channel):
+    if message.content.startswith('!botcommands'):
         await client.send_message(message.channel, 'To register use:\n\t`!register`\nTo get a tag use:\n\t`!tag TAG_NAME`\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
 
     if message.content.startswith('!hello') and message.channel.id == dev_channel:
@@ -46,6 +49,9 @@ async def on_message(message):
 # async def on_error(event, *args, **kwargs):
 #     pass
 
+# updates user database using the sheets sheets_interface script
+# checks if user is registered in the database
+# if the user is not found it will send an error message
 async def register(message):
     sheets_interface.main
     if sql_handler.is_registered(author.name):
