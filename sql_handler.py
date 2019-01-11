@@ -52,7 +52,7 @@ def is_registered(user_name):
     if len(_cursor.fetchall()) > 0:
         return True
     else:
-        sheets_interface.main
+        sheets_interface.main()
         _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'{}%\''.format(user_name))
         if len(_cursor.fetchall()) > 0:
             return True
