@@ -28,7 +28,7 @@ async def on_message(message):
         return
 
     #registers the user
-    if message.content.startswith('!register') and (message.channel.id == reg_channel or message.channel.id == com_channel):
+    if message.content.startswith('!register') and (message.channel.id == reg_channel or message.channel.id == com_channel or message.channel.id == dev_channel):
         await register(message)
     #adds tag to the user
     if message.content.startswith('!tag ') and message.channel.id == com_channel:
@@ -55,7 +55,8 @@ async def on_message(message):
 async def register(message):
     sheets_interface.main
     if sql_handler.is_registered(message.author.name):
-        await client.add_roles(author, role)
+        role = discord.utils.get(message.server.roles, name='McMaster Student')
+        await client.add_roles(message.author, role)
         await client.send_message(message.channel, 'Enjoy your stay :grinning:')
         return
     else:
