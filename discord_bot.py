@@ -42,7 +42,7 @@ async def on_message(message):
         await client.send_message(message.channel, 'Hello to you too!')
     if message.content.startswith('test') and message.channel.id == dev_channel:
         print('updating DB')
-        sheets_interface.main
+        sheets_interface.main()
 
 # TODO: implement on error function to log the error and prompt user to contact me or moderator
 # @client.event
@@ -53,7 +53,7 @@ async def on_message(message):
 # checks if user is registered in the database
 # if the user is not found it will send an error message
 async def register(message):
-    sheets_interface.main
+    sheets_interface.main()
     if sql_handler.is_registered(message.author.name):
         role = discord.utils.get(message.server.roles, name='McMaster Student')
         await client.add_roles(message.author, role)
