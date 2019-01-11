@@ -54,7 +54,7 @@ async def on_message(message):
 # if the user is not found it will send an error message
 async def register(message):
     sheets_interface.main
-    if sql_handler.is_registered(author.name):
+    if sql_handler.is_registered(message.author.name):
         await client.add_roles(author, role)
         await client.send_message(message.channel, 'Enjoy your stay :grinning:')
         return
