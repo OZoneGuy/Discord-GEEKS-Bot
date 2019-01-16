@@ -54,7 +54,7 @@ async def on_message(message):
 # if the user is not found it will send an error message
 async def register(message):
     sheets_interface.main()
-    if sql_handler.is_registered(message.author.name):
+    if sql_handler.is_registered(message.author.name, message.author.discriminator):
         role = discord.utils.get(message.server.roles, name='McMaster Student')
         await client.add_roles(message.author, role)
         await client.send_message(message.channel, 'Enjoy your stay :grinning:')
