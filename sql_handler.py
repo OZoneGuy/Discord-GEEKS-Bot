@@ -46,15 +46,23 @@ def insert_form_response(time, user_name, name_prog, alumni, interests, email):
     print('Member {} already recorded'.format(user_name))
 
 
-def is_registered(user_name):
+def is_registered(user_name, user_disc):
     print(user_name)
     _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'{}%\''.format(user_name))
     if len(_cursor.fetchall()) > 0:
         return True
     else:
-        sheets_interface.main()
-        _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'{}%\''.format(user_name))
+        _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'%{}\''.format(user_disc))
         if len(_cursor.fetchall()) > 0:
             return True
         else:
-            return False
+            sheets_interface.main()
+            _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'{}%\''.format(user_name))
+            if len(_cursor.fetchall()) > 0:
+                return True
+            else:
+                _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'%{}\''.format(user_disc))
+                if len(_cursor.fetchall()) > 0:
+                    return True
+                else:
+                    return False
