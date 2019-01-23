@@ -27,6 +27,14 @@ async def on_message(message):
     if message.author is client.user:
         return
 
+    #WIP
+    #adds to the count of total messages made by user for level up system
+    if message.channel.id == dev_channel:
+        sql_handler.add_message(message.author.id, message.author.name, message.author.discriminator)
+        #checks if user is ready for a level up
+        if sql_handler.is_lvl_up(message.author.id):
+            sql_handler.lvl_up(message.author.id)
+
     #registers the user
     if message.content.startswith('!register') and (message.channel.id == reg_channel or message.channel.id == com_channel or message.channel.id == dev_channel):
         await register(message)
@@ -38,6 +46,7 @@ async def on_message(message):
     if message.content.startswith('!botcommands'):
         await client.send_message(message.channel, 'To register use:\n\t`!register`\nTo get a tag use(Only available in the `botcommands` channel):\n\t`!tag TAG_NAME`\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
 
+    #used for testint
     if message.content.startswith('!hello') and message.channel.id == dev_channel:
         await client.send_message(message.channel, 'Hello to you too!')
     if message.content.startswith('test') and message.channel.id == dev_channel:
@@ -88,5 +97,7 @@ async def give_tag(message):
         await client.send_message(message.channel, 'You need the required tag first.')
         return
 
+async def level_up(user_id):
+    pass
 
 client.run(config['token'])
