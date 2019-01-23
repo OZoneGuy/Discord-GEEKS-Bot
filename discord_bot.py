@@ -7,8 +7,7 @@ config = json.load(open('config.json'))
 #bot client
 client = discord.Client()
 
-forbidden_roles = ['PRISON WARDENS', 'GEEKS Exec', 'Vault Exec', 'Community Moderator', 'Seasoned Veterans',
-                   'Vault Hunters', 'McMaster GEEKS Role Bot', 'Bot Army']
+allowed_roles = ['Video Games', 'MTG', 'Pokemon', 'Smash', 'DND', 'Anime']
 
 reg_channel = '406292711646167045'
 dev_channel = '385506783919079425'
@@ -68,7 +67,7 @@ async def give_tag(message):
     role_string = message.content[5:]
     author = message.author
     role = discord.utils.get(message.server.roles, name=role_string)
-    if role_string in forbidden_roles:
+    if not (role_string in allowed_roles):
         await client.send_message(message.channel, 'You do not have permission to get this role.')
         return
     if "McMaster Student".lower() in [y.name.lower() for y in author.roles]:
