@@ -35,7 +35,7 @@ async def on_message(message):
 
     #gives all commands user can use
     if message.content.startswith('!botcommands'):
-        await client.send_message(message.channel, 'To register use:\n\t`!register`\nTo get a tag use(Only available in the `botcommands` channel):\n\t`!tag TAG_NAME`\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
+        await client.send_message(message.channel, 'To register use:\n\t`!register`\nTo get a tag use(Only available in the `#botcommands` channel):\n\t`!tag TAG_NAME`\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
 
     if message.content.startswith('!hello') and message.channel.id == dev_channel:
         await client.send_message(message.channel, 'Hello to you too!')
@@ -87,5 +87,8 @@ async def give_tag(message):
         await client.send_message(message.channel, 'You need the required tag first.')
         return
 
+@client.event
+async def on_member_join(member):
+    await client.send_message(member, "Welcome to the `McMaster GEEKS` discord server!\n To register and gain access to the server please complete the `google form` linked below. Then you can use the `!register` command to register!\nhttps://goo.gl/forms/phEbKvQzTi6MlIQ12")
 
 client.run(config['token'])
