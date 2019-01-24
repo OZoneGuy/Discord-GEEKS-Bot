@@ -7,8 +7,7 @@ config = json.load(open('config.json'))
 #bot client
 client = discord.Client()
 
-forbidden_roles = ['PRISON WARDENS', 'GEEKS Exec', 'Vault Exec', 'Community Moderator', 'Seasoned Veterans',
-                   'Vault Hunters', 'McMaster GEEKS Role Bot', 'Bot Army']
+allowed_roles = ['Video Games', 'MTG', 'Pokemon', 'Smash', 'DND', 'Anime']
 
 reg_channel = '406292711646167045'
 dev_channel = '385506783919079425'
@@ -45,7 +44,7 @@ async def on_message(message):
 
     #gives all commands user can use
     if message.content.startswith('!botcommands'):
-        await client.send_message(message.channel, 'To register use:\n\t`!register`\nTo get a tag use(Only available in the `botcommands` channel):\n\t`!tag TAG_NAME`\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
+        await client.send_message(message.channel, 'To register use:\n\t`!register`\nTo get a tag use(Only available in the `#botcommands` channel):\n\t`!tag TAG_NAME`\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
 
     #used for testint
     if message.content.startswith('!hello') and message.channel.id == dev_channel:
@@ -73,7 +72,7 @@ async def give_tag(message):
     role_string = message.content[5:]
     author = message.author
     role = discord.utils.get(message.server.roles, name=role_string)
-    if role_string in forbidden_roles:
+    if not (role_string in allowed_roles):
         await client.send_message(message.channel, 'You do not have permission to get this role.')
         return
     if "McMaster Student".lower() in [y.name.lower() for y in author.roles]:
@@ -93,10 +92,16 @@ async def give_tag(message):
         await client.send_message(message.channel, 'You need the required tag first.')
         return
 
+<<<<<<< HEAD
 async def level_up_message(message):
     messages = sql_handler.messages_req_for_lvl(sql_handler.get_level(message.author.id)) - sql_handler.get_messages(message.author.id)
     await client.send_message(message.channel, 'Congrats {} for reaching level {}! Only {} messages more to go.'.format(message.author.mention, sql_handler.get_level(message.author.id), messages))
 
 
+=======
+@client.event
+async def on_member_join(member):
+    await client.send_message(member, "Welcome to the `McMaster GEEKS` discord server!\n To register and gain access to the server please complete the `google form` linked below. Then you can use the `!register` command to register!\nhttps://goo.gl/forms/phEbKvQzTi6MlIQ12")
+>>>>>>> master
 
 client.run(config['token'])
