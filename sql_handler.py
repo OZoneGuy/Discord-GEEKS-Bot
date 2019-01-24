@@ -10,7 +10,7 @@ _cursor.execute("CREATE TABLE IF NOT EXISTS jokes (_id INTEGER PRIMARY KEY AUTOI
 #TODO: Add registered field
 _cursor.execute("CREATE TABLE IF NOT EXISTS form_responses (timeStamp TEXT, discord_name TEXT, name_and_program TEXT, alumni INTEGER, interests TEXT, email TEXT, PRIMARY KEY(email, discord_name))")
 
-_cursor.execute("CREATE TABLE IF NOT EXISTS user_lvl_n_msgs (_user_id INTEGER PRIMARY KEY, user_name TEXT, user_disc INTEGER, message_cnt INTEGER, level INTEGER)")
+_cursor.execute("CREATE TABLE IF NOT EXISTS user_lvl_n_msgs (_user_id INTEGER PRIMARY KEY, message_cnt INTEGER, level INTEGER)")
 
 def insert_joke(post_id, title, body, author):
     _cursor.execute('SELECT * FROM jokes WHERE post_id = "' + str(post_id) + '"')
@@ -66,17 +66,17 @@ def is_registered(user_name, user_disc):
                 else:
                     return False
 
-def add_message(user_id, user_name, user_disc):
+def add_message(user_id):
     _cursor.execute('SELECT message_cnt FROM user_lvl_n_msgs WHERE _user_id = {}'.format(user_id))
-
     data = _cursor.fetchall()
     if len(data) > 0:
         message_cnt = data[0][0]
         new_message_cnt = 1 + message_cnt
+        print(new_message_cnt)
         _cursor.execute('UPDATE user_lvl_n_msgs SET message_cnt = {} WHERE _user_id = {}'.format(new_message_cnt, user_id))
         _db.commit()
     else:
-        _cursor.execute('INSERT INTO user_lvl_n_msgs (_user_id, user_name, user_disc, message_cnt, level) VALUES({}, \'{}\', {}, {}, {})'.format(user_id, user_name, user_disc, 1, 1))
+        _cursor.execute('INSERT INTO user_lvl_n_msgs (_user_id, message_cnt, level) VALUES({}, {}, {})'.format(user_id, 1, 1))
         _db.commit()
 
 #checks if user is eady for level up

@@ -26,14 +26,14 @@ async def on_message(message):
     if message.author is client.user:
         return
 
-    #WIP
     #adds to the count of total messages made by user for level up system
     if message.channel.id == dev_channel:
-        sql_handler.add_message(message.author.id, message.author.name, message.author.discriminator)
+        sql_handler.add_message(message.author.id)
         #checks if user is ready for a level up
         if sql_handler.is_lvl_up(message.author.id):
+            print('new level')
             sql_handler.lvl_up(message.author.id)
-            level_up(message)
+            await level_up(message)
 
     #registers the user
     if message.content.startswith('!register') and (message.channel.id == reg_channel or message.channel.id == com_channel or message.channel.id == dev_channel):
@@ -92,16 +92,12 @@ async def give_tag(message):
         await client.send_message(message.channel, 'You need the required tag first.')
         return
 
-<<<<<<< HEAD
-async def level_up_message(message):
-    messages = sql_handler.messages_req_for_lvl(sql_handler.get_level(message.author.id)) - sql_handler.get_messages(message.author.id)
-    await client.send_message(message.channel, 'Congrats {} for reaching level {}! Only {} messages more to go.'.format(message.author.mention, sql_handler.get_level(message.author.id), messages))
+async def level_up(message):
+    message_cnt = sql_handler.messages_req_for_lvl(sql_handler.get_level(message.author.id)) - sql_handler.get_messages(message.author.id)
+    await client.send_message(message.channel, 'Congrats {} for reaching level {}! Only {} messages more to go.'.format(message.author.mention, sql_handler.get_level(message.author.id), message_cnt))
 
-
-=======
 @client.event
 async def on_member_join(member):
     await client.send_message(member, "Welcome to the `McMaster GEEKS` discord server!\n To register and gain access to the server please complete the `google form` linked below. Then you can use the `!register` command to register!\nhttps://goo.gl/forms/phEbKvQzTi6MlIQ12")
->>>>>>> master
 
 client.run(config['token'])
