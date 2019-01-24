@@ -28,12 +28,12 @@ async def on_message(message):
 
     #adds to the count of total messages made by user for level up system
     # if message.channel.id == dev_channel:
-        sql_handler.add_message(message.author.id)
-        #checks if user is ready for a level up
-        if sql_handler.is_lvl_up(message.author.id):
-            print('new level')
-            sql_handler.lvl_up(message.author.id)
-            await level_up(message)
+    sql_handler.add_message(message.author.id)
+    #checks if user is ready for a level up
+    if sql_handler.is_lvl_up(message.author.id):
+        print('new level')
+        sql_handler.lvl_up(message.author.id)
+        await level_up(message)
 
     #registers the user
     if message.content.startswith('!register') and (message.channel.id == reg_channel or message.channel.id == com_channel or message.channel.id == dev_channel):
