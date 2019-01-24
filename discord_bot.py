@@ -27,7 +27,7 @@ async def on_message(message):
         return
 
     #adds to the count of total messages made by user for level up system
-    if message.channel.id == dev_channel:
+    # if message.channel.id == dev_channel:
         sql_handler.add_message(message.author.id)
         #checks if user is ready for a level up
         if sql_handler.is_lvl_up(message.author.id):
