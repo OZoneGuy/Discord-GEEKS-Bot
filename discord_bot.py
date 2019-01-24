@@ -34,6 +34,7 @@ async def on_message(message):
         #checks if user is ready for a level up
         if sql_handler.is_lvl_up(message.author.id):
             sql_handler.lvl_up(message.author.id)
+            level_up(message)
 
     #registers the user
     if message.content.startswith('!register') and (message.channel.id == reg_channel or message.channel.id == com_channel or message.channel.id == dev_channel):
@@ -52,11 +53,6 @@ async def on_message(message):
     if message.content.startswith('test') and message.channel.id == dev_channel:
         print('updating DB')
         sheets_interface.main()
-
-# TODO: implement on error function to log the error and prompt user to contact me or moderator
-# @client.event
-# async def on_error(event, *args, **kwargs):
-#     pass
 
 # updates user database using the sheets sheets_interface script
 # checks if user is registered in the database
@@ -97,7 +93,10 @@ async def give_tag(message):
         await client.send_message(message.channel, 'You need the required tag first.')
         return
 
-async def level_up(user_id):
-    pass
+async def level_up_message(message):
+    messages = sql_handler.messages_req_for_lvl(sql_handler.get_level(message.author.id)) - sql_handler.get_messages(message.author.id)
+    await client.send_message(message.channel, 'Congrats {} for reaching level {}! Only {} messages more to go.'.format(message.author.mention, sql_handler.get_level(message.author.id), messages))
+
+
 
 client.run(config['token'])
