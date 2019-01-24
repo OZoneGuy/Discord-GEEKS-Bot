@@ -91,8 +91,19 @@ def is_lvl_up(user_id):
     return False
 
 def messages_req_for_lvl(cur_lvl):
-    return (cur_lvl+1)^2
+    return 2**(cur_lvl+1)
     pass
+
+def get_messages(user_id):
+    _cursor.execute('SELECT message_cnt FROM user_lvl_n_msgs WHERE _user_id = {}'.format(user_id))
+    data = _cursor.fetchone()
+    return data[0]
+
+
+def get_level(user_id):
+    _cursor.execute('SELECT level FROM user_lvl_n_msgs WHERE _user_id = {}'.format(user_id))
+    data = _cursor.fetchone()
+    return data[0]
 
 #adds 1 to level
 def lvl_up(user_id):
