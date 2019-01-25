@@ -33,7 +33,8 @@ async def on_message(message):
     if sql_handler.is_lvl_up(message.author.id):
         print('new level')
         sql_handler.lvl_up(message.author.id)
-        await level_up(message)
+        if sql_handler.get_level(message.author.id) >= 5:
+            await level_up(message)
 
     #registers the user
     if message.content.startswith('!register') and (message.channel.id == reg_channel or message.channel.id == com_channel or message.channel.id == dev_channel):
