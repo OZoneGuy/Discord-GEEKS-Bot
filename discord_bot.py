@@ -49,7 +49,7 @@ async def on_message(message):
     if message.content.startswith('!botcommands'):
         await client.send_message(message.channel, 'To register use:\n\t`!register`\nTo get a tag use(Only available in the `#botcommands` channel):\n\t`!tag TAG_NAME`\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
 
-    if contains_im(message.content) and random.random()>0.2:
+    if message.channel.id == dev_channel and contains_im(message.content) and random.random()>0.2:
         await client.send_message(message.channel, 'Hello {0}. I am The GEEKS Bot!'.format(contains_im(message.content)))
 
 
