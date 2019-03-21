@@ -2,7 +2,7 @@ import discord
 import json
 import sql_handler
 import sheets_interface
-import math.random
+import random
 
 config = json.load(open('config.json'))
 
