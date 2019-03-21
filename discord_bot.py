@@ -2,6 +2,8 @@ import discord
 import json
 import sql_handler
 import sheets_interface
+import math.random
+
 config = json.load(open('config.json'))
 
 #bot client
@@ -47,12 +49,20 @@ async def on_message(message):
     if message.content.startswith('!botcommands'):
         await client.send_message(message.channel, 'To register use:\n\t`!register`\nTo get a tag use(Only available in the `#botcommands` channel):\n\t`!tag TAG_NAME`\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
 
+    if contains_im(message.content) and random.random()>0.2:
+        await client.send_message(message.channel, 'Hello {0}. I am The GEEKS Bot!'.format(contains_im(message.content)))
+
+
     #used for testint
     if message.content.startswith('!hello') and message.channel.id == dev_channel:
         await client.send_message(message.channel, 'Hello to you too!')
     if message.content.startswith('test') and message.channel.id == dev_channel:
         print('updating DB')
         sheets_interface.main()
+
+@client.event
+async def on_member_join(member):
+    await client.send_message(member, "Welcome to the `McMaster GEEKS` discord server!\n To register and gain access to the server please complete the `google form` linked below. Then you can use the `!register` command to register!\nhttps://goo.gl/forms/phEbKvQzTi6MlIQ12")
 
 # updates user database using the sheets sheets_interface script
 # checks if user is registered in the database
@@ -97,8 +107,22 @@ async def level_up(message):
     message_cnt = sql_handler.messages_req_for_lvl(sql_handler.get_level(message.author.id)) - sql_handler.get_messages(message.author.id)
     await client.send_message(message.channel, 'Congrats {} for reaching level {}! Only {} messages more to go.'.format(message.author.mention, sql_handler.get_level(message.author.id), message_cnt))
 
-@client.event
-async def on_member_join(member):
-    await client.send_message(member, "Welcome to the `McMaster GEEKS` discord server!\n To register and gain access to the server please complete the `google form` linked below. Then you can use the `!register` command to register!\nhttps://goo.gl/forms/phEbKvQzTi6MlIQ12")
+def contains_im(text):
+    if 'I am' in text:
+        word = text.split("I am", 1)[1].split(" ")[1]
+        return word
+
+    if "I'm" in text:
+        word = text.split("I'm", 1)[1].split(" ")[1]
+        return word
+
+    if "Im" in text:
+        word = text.split("Im", 1)[1].split(" ")[1]
+        return word
+
+    if "im" in text:
+        word = text.split("im", 1)[1].split(" ")[1]
+        return [True, word]
+
 
 client.run(config['token'])
