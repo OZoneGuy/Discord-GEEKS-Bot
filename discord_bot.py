@@ -124,5 +124,4 @@ def contains_im(text):
         word = text.split("im", 1)[1].split(" ")[1]
         return [True, word]
 
-
 client.run(config['token'])
