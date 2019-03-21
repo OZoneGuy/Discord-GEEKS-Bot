@@ -51,7 +51,7 @@ async def on_message(message):
 
     if message.channel.id == dev_channel and contains_im(message.content):
         print(contains_im(message.content))
-        if random.random()>0.2
+        if random.random()>0.2:
             await client.send_message(message.channel, 'Hello {0}. I am The GEEKS Bot!'.format(contains_im(message.content)))
 
 
