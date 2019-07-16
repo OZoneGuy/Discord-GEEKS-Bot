@@ -3,6 +3,7 @@ import json
 import sql_handler
 import sheets_interface
 import random
+import time
 
 config = json.load(open('config.json'))
 
@@ -70,16 +71,21 @@ async def on_member_join(member):
 # checks if user is registered in the database
 # if the user is not found it will send an error message
 async def register(message):
-    sheets_interface.main()
-    if sql_handler.is_registered(message.author.name, message.author.discriminator):
-        role = discord.utils.get(message.server.roles, name='McMaster Student')
-        await client.add_roles(message.author, role)
-        await client.send_message(message.channel, 'Enjoy your stay :grinning:')
-        return
-    else:
-        await client.send_message(message.channel, 'You need to register first , https://goo.gl/forms/phEbKvQzTi6MlIQ12 . \n If you have already registered then wait a few minutes and try again, if the issue still persists, then contact OZoneGuy or the server mods to resolve the issue.')
-        sheets_interface.main
-        return
+    tries = 0
+    while tries < 3:
+        sheets_interface.main()
+        if sql_handler.is_registered(message.author.name, message.author.discriminator):
+            role = discord.utils.get(message.server.roles, name='McMaster Student')
+            await client.add_roles(message.author, role)
+            await client.send_message(message.channel, 'Enjoy your stay :grinning:')
+            print("Registered {}.".format(message.author.name))
+            return
+        time.sleep(0.5)
+        tries+=1
+
+    await client.send_message(message.channel, 'You need to register first , https://goo.gl/forms/phEbKvQzTi6MlIQ12 . \n If you have already registered then wait a few minutes and try again, if the issue still persists, then contact OZoneGuy or the server mods to resolve the issue.')
+    return
+
 
 async def give_tag(message):
     role_string = message.content[5:]
