@@ -42,7 +42,6 @@ def insert_form_response(time, user_name, name_prog, alumni, interests, email):
         _cursor.execute(sql)
         _db.commit()
         return
-    print('Member {} already recorded'.format(user_name))
 
 
 def is_registered(user_name, user_disc):
