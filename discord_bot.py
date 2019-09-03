@@ -10,7 +10,7 @@ config = json.load(open('config.json'))
 #bot client
 client = discord.Client()
 
-allowed_roles = ['Video Games', 'MTG', 'Pokemon', 'Smash', 'DND', 'Anime']
+allowed_roles = ['video games', 'mtg', 'pokemon', 'smash', 'dnd', 'anime']
 
 reg_channel = '406292711646167045'
 dev_channel = '385506783919079425'
@@ -88,7 +88,7 @@ async def register(message):
 
 
 async def give_tag(message):
-    role_string = message.content[5:]
+    role_string = message.content[5:].lower()
     author = message.author
     role = discord.utils.get(message.server.roles, name=role_string)
     if not (role_string in allowed_roles):
