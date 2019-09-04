@@ -10,7 +10,7 @@ config = json.load(open('config.json'))
 #bot client
 client = discord.Client()
 
-allowed_roles = ['video games', 'mtg', 'pokemon', 'smash', 'dnd', 'anime']
+
 
 reg_channel = '406292711646167045'
 dev_channel = '385506783919079425'
@@ -90,11 +90,20 @@ async def register(message):
     return
 
 
+allowed_roles = ['video games', 'mtg', 'pokemon', 'smash', 'dnd', 'anime', 'minecraft']
+roles_dic =   { 'anime':        487415117361971200,
+                'dnd':          487415117420429312,
+                'minecraft':    570307869279518720,
+                'tetris':       554029029905137676,
+                'smash':        487415401085403157,
+                'pokemon':      488887610882916352,
+                'mtg':          487415696507142164,
+                'video games':  487415401131540490}
+
 async def give_tag(message):
-    role_string = message.content[5:].lower().capitalize()
+    role_string = message.content[5:].lower()
+    role = message.server.get_role(roles_dic[role_string])
     author = message.author
-    role = discord.utils.get(message.server.roles, name=role_string)
-    print(role_string)
     if not (role_string in allowed_roles):
         await client.send_message(message.channel, 'You do not have permission to get this role.')
         return
