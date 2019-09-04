@@ -91,9 +91,10 @@ async def register(message):
 
 
 async def give_tag(message):
-    role_string = message.content[5:].lower()
+    role_string = message.content[5:].lower().capitalize()
     author = message.author
     role = discord.utils.get(message.server.roles, name=role_string)
+    print(role_string)
     if not (role_string in allowed_roles):
         await client.send_message(message.channel, 'You do not have permission to get this role.')
         return
