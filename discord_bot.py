@@ -79,7 +79,7 @@ async def register(message):
         sheets_interface.main()
         if sql_handler.is_registered(message.author.name, message.author.discriminator):
             role = discord.utils.get(message.guild.roles, name='McMaster Student')
-            await client.add_roles(message.author, role)
+            await message.author.add_roles(role)
             await message.channel.send( 'Enjoy your stay :grinning:')
             print("Registered {}.".format(message.author.name))
             return
@@ -112,7 +112,7 @@ async def give_tag(message):
             if role in author.roles:
                 await message.channel.send( 'You already have this tag!')
                 return
-            await client.add_roles(author, role)
+            await author.add_roles(role)
             await message.channel.send(
                                       'Enjoy your new tag :grinning: {0.author.mention}'.format(message))
 
