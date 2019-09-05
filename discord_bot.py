@@ -121,7 +121,7 @@ async def give_tag(message):
             await message.channel.send( 'Role does not exist.')
             return
     else:
-        await message.channel.send( 'You need the required tag first.')
+        await message.channel.send( 'You need to register first. Please use `!register`.')
         return
 
 async def level_up(message):
