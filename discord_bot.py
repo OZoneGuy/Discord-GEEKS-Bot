@@ -51,17 +51,17 @@ async def on_message(message):
 
     #gives all commands user can use
     if message.content.startswith('!botcommands'):
-        await message.channel.send(message.channel, 'To register use:\n\t`!register`\nTo get a tag use(Only available in the `#botcommands` channel):\n\t`!tag TAG_NAME`\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
+        await message.channel.send( 'To register use:\n\t`!register`\nTo get a tag use(Only available in the `#botcommands` channel):\n\t`!tag TAG_NAME`\nAvailable tags are:\n\tAnime\n\tDND\n\tSmash\n\tPokemon\n\tMTG\n\tVideo Games\n\nIf there are any issues please contact the mods or OZoneGuy.')
 
 #    if message.channel.id == dev_channel and contains_im(message.content):
 #        print(contains_im(message.content))
 #        if random.random()>0.2:
-#            await message.channel.send(message.channel, 'Hello {0}. I am The GEEKS Bot!'.format(contains_im(message.content)))
+#            await message.channel.send( 'Hello {0}. I am The GEEKS Bot!'.format(contains_im(message.content)))
 
 
     #used for testint
     if message.content.startswith('!hello') and message.channel.id == dev_channel:
-        await message.channel.send(message.channel, 'Hello to you too!')
+        await message.channel.send( 'Hello to you too!')
     if message.content.startswith('test') and message.channel.id == dev_channel:
         print('updating DB')
         sheets_interface.main()
@@ -80,13 +80,13 @@ async def register(message):
         if sql_handler.is_registered(message.author.name, message.author.discriminator):
             role = discord.utils.get(message.guild.roles, name='McMaster Student')
             await client.add_roles(message.author, role)
-            await message.channel.send(message.channel, 'Enjoy your stay :grinning:')
+            await message.channel.send( 'Enjoy your stay :grinning:')
             print("Registered {}.".format(message.author.name))
             return
         time.sleep(0.5)
         tries+=1
 
-    await message.channel.send(message.channel, 'You need to register first , https://goo.gl/forms/phEbKvQzTi6MlIQ12 . \n If you have already registered then wait a few minutes and try again, if the issue still persists, then contact OZoneGuy or the server mods to resolve the issue.')
+    await message.channel.send( 'You need to register first , https://goo.gl/forms/phEbKvQzTi6MlIQ12 . \n If you have already registered then wait a few minutes and try again, if the issue still persists, then contact OZoneGuy or the server mods to resolve the issue.')
     return
 
 
@@ -105,28 +105,28 @@ async def give_tag(message):
     role = message.guild.get_role(roles_dic[role_string])
     author = message.author
     if not (role_string in allowed_roles):
-        await message.channel.send(message.channel, 'You do not have permission to get this role.')
+        await message.channel.send( 'You do not have permission to get this role.')
         return
     if "McMaster Student".lower() in [y.name.lower() for y in author.roles]:
         if role is not None:
             if role in author.roles:
-                await message.channel.send(message.channel, 'You already have this tag!')
+                await message.channel.send( 'You already have this tag!')
                 return
             await client.add_roles(author, role)
-            await message.channel.send(message.channel,
+            await message.channel.send(
                                       'Enjoy your new tag :grinning: {0.author.mention}'.format(message))
 
             return
         else:
-            await message.channel.send(message.channel, 'Role does not exist.')
+            await message.channel.send( 'Role does not exist.')
             return
     else:
-        await message.channel.send(message.channel, 'You need the required tag first.')
+        await message.channel.send( 'You need the required tag first.')
         return
 
 async def level_up(message):
     message_cnt = sql_handler.messages_req_for_lvl(sql_handler.get_level(message.author.id)) - sql_handler.get_messages(message.author.id)
-    await message.channel.send(message.channel, 'Congrats {} for reaching level {}! Only {} messages more to go.'.format(message.author.mention, sql_handler.get_level(message.author.id), message_cnt))
+    await message.channel.send( 'Congrats {} for reaching level {}! Only {} messages more to go.'.format(message.author.mention, sql_handler.get_level(message.author.id), message_cnt))
 
 def contains_im(text):
     if 'I am' in text:
