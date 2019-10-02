@@ -2,13 +2,7 @@ import discord
 import json
 import sql_handler
 import sheets_interface
-import random
-import time
-
-config = json.load(open('config.json'))
-
-#bot client
-client = discord.Client()
+from datetime import datetime
 
 
 
