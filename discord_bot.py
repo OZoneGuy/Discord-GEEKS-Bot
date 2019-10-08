@@ -76,9 +76,57 @@ async def on_message(message: discord.Message):
             message.author.add_roles(message.guild.get_role(roles_dic['guest']))
     pass
 
-@client.event
-        else:
 
+# add role depending on reaction to message
+@client.event
+async def on_raw_reaction_remove(payload: discord.RawReactionActionEvent):
+    '''
+    Only does something when users react to a specific message
+    Removes user role depending on reaction only if they are registered/students
+    '''
+    if payload.message_id == role_message:
+        # gets text form of emoji
+        # if it a unicode emoji uses `emoji` library to get text form
+        # else discord provides the name
+        if(payload.emoji.is_unicode_emoji()):
+            emoji_name = emoji.demojize(payload.emoji.name)
+        else:
+            emoji_name = payload.emoji.name
+        guild = client.get_guild(payload.guild_id)  # type: discord.Guild
+        member = guild.get_member(payload.user_id) # type: discord.Member
+        channel = client.get_channel(payload.channel_id) # type: discord.TextChannel
+        role = guild.get_role(roles_dic[emoji_name]) # type: discord.Role
+        # remove member role
+        member.remove_role(role)
+        # print message and delete after 3 seconds
+        await channel.send("Removed {} tag. {}.".format(role.name, member.mention))
+        pass
+    pass
+
+@client.event
+async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
+    '''
+    Only does something when users react to a specific message
+    Gives user role depending on reaction only if they are registered/students
+    '''
+    if payload.message_id == role_message:
+        # gets text form of emoji
+        # if it a unicode emoji uses `emoji` library to get text form
+        # else discord provides the name
+        if(payload.emoji.is_unicode_emoji()):
+            emoji_name = emoji.demojize(payload.emoji.name)
+        else:
+            emoji_name = payload.emoji.name
+        guild = client.get_guild(payload.guild_id)  # type: discord.Guild
+        member = guild.get_member(payload.user_id) # type: discord.Member
+        channel = client.get_channel(payload.channel_id) # type: discord.TextChannel
+        role = guild.get_role(roles_dic[emoji_name]) # type: discord.Role
+        # add member role
+        member.add_role(role)
+        # print message and delete after 3 seconds
+        await channel.send("Added {} tag. {}.".format(role.name, member.mention))
+        pass
+    pass
 
 
 async def register(message: discord.Message):
