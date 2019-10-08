@@ -5,7 +5,9 @@ import sheets_interface
 import emoji
 from datetime import datetime
 
+version = "0.8.10.19 A"
 
+config = json.load(open("config.json"))
 
 # channel IDs
 reg_channel = 406292711646167045
@@ -46,12 +48,12 @@ def write_log(text: str):
     pass
 
 #bot client
-client = discord.Client() # type: discord.Client
+client = discord.Client() # type: discord.Client()
 
 # on ready function - logs ready time
 @client.event
 async def on_ready():
-    print('Starting Discord Bot.\tVersion: {}'.format(version))
+    print("TheGeek is ready.")
     write_log("Ready.")
     pass
 
