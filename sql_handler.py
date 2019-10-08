@@ -23,14 +23,6 @@ def insert_joke(post_id, title, body, author):
     print("joke already exists")
 
 
-def get_random_joke():
-    _cursor.execute('SELECT * FROM jokes ORDER BY RANDOM() LIMIT 1')
-    joke = _cursor.fetchone()
-    if joke is None:
-        return ['', '', '']
-    return [joke[2], joke[3], joke[4], joke[1]]
-
-
 def insert_form_response(time, user_name, name_prog, alumni, interests, email):
     search = 'SELECT * FROM form_responses WHERE email = "{}" OR discord_name = "{}"'.format(email, user_name)
     _cursor.execute(search)
@@ -45,25 +37,11 @@ def insert_form_response(time, user_name, name_prog, alumni, interests, email):
 
 
 def is_registered(user_name, user_disc):
-    print(user_name)
     _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'{}%\''.format(user_name))
     if len(_cursor.fetchall()) > 0:
         return True
     else:
-        _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'%{}\''.format(user_disc))
-        if len(_cursor.fetchall()) > 0:
-            return True
-        else:
-            sheets_interface.main()
-            _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'{}%\''.format(user_name))
-            if len(_cursor.fetchall()) > 0:
-                return True
-            else:
-                _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'%{}\''.format(user_disc))
-                if len(_cursor.fetchall()) > 0:
-                    return True
-                else:
-                    return False
+        return False
 
 def add_message(user_id):
     _cursor.execute('SELECT message_cnt FROM user_lvl_n_msgs WHERE _user_id = {}'.format(user_id))
