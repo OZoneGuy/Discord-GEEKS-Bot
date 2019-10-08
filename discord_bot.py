@@ -2,6 +2,7 @@ import discord
 import json
 import sql_handler
 import sheets_interface
+import emoji
 from datetime import datetime
 
 
