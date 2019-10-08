@@ -56,6 +56,25 @@ async def on_ready():
     pass
 
 @client.event
+async def on_message(message: discord.Message):
+    '''
+    Called when a user sends a message in a chat the bot can access, server channels, DMs, etc.
+    Used to react to messages asking for registration.
+    '''
+    if message.channel.id == dev_channel:
+        pass
+    # Used for registering users
+    elif message.channel.id == reg_channel:
+        '''
+        handles commands on register channel
+        '''
+        # attempts to register user
+        if "!register" in message.conents:
+            register(message) 
+        # gives them guest tag, maybe ask approval from mods using reactions
+        elif "!guest" in message.contents:
+            message.author.add_roles(message.guild.get_role(roles_dic['guest']))
+    pass
 
 @client.event
         else:
