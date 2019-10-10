@@ -177,12 +177,16 @@ async def register(message: discord.Message):
         role = message.guild.get_role(roles_dic['student']) # type: discord.Role
         message.author.add_role(role) # add role
         write_log(format("Successfully registered {} !", message.author.name)) # log result
-        message.channel.send(content=reg_msg.format(message.author.mention)).delete(delay=3) # notify user success and delete notify message after 3 seconds
+        message.channel.send(content=reg_msg.format(message.author.mention), delete_after=3) # notify user success and delete notify message after 3 seconds
         message.delete(delay=0.5) # delete user message
     else:
         write_log(format("Failed to register {}!", message.author.name)) # log result (failure)
-        message.channel.send(content=not_reg_msg.format(message.author.mention)).delete(delay=3) # notify user of failure then delete notify message
+        message.channel.send(content=not_reg_msg.format(message.author.mention), delete_after=3) # notify user of failure then delete notify message
         message.delete(delay=0.5) # delete user message
+    pass
+
+async def welcom_message():
+    await client.get_channel(406292711646167045).send(content=intro_message)
     pass
 
 client.run(config['token'])
