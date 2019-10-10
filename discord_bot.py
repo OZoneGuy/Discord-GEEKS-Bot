@@ -18,18 +18,23 @@ com_channel = 520680784949018639
 # TODO get actual message id
 role_message = 0000000
 # TODO replace keys with emojis
-roles_dic =   { ':flag_jp:':                    487415117361971200, #need to ask Atom about each reaction
-                ':pick:':                       570307869279518720,
-                ':large_blue_diamond:':         554029029905137676,
-                ':vs:':                         487415401085403157,
-                ':feet:':                       488887610882916352,
-                ':flower_playing_cards:':       448741569650714216,
-                ':trophy:':                     619372177757831168,
-                ':game_die:':                   626161640768798730,
-                'MMO':                          619372523754094602,
-                'table_top':                    619371680992591882,
-                'video games':                  487415401131540490,
-                'dnd':                          487415117420429312,
+roles_dic =   { ':flag_jp:':                    487415117361971200, # anime
+                ':pick:':                       570307869279518720, # minecraft
+                ':large_blue_diamond:':         554029029905137676, # tetris
+                ':vs:':                         487415401085403157, # smash
+                ':feet:':                       488887610882916352, # pokemon
+                ':flower_playing_cards:':       448741569650714216, # TCG
+                ':trophy:':                     619372177757831168, # eSports
+                ':game_die:':                   626161640768798730, # Boardgames
+
+                ':crossed_swords:':             619372523754094602, # MMO
+                ':tophat:':                     619371680992591882, # tabletop
+                ':video_game:':                 487415401131540490, # video games
+                ':dragon_face:':                487415117420429312, # DnD
+
+                'events':                             00000000000,      # needs a new tag
+                'film':                             00000000000,        # needs a new tag
+                'pokemon_go':                             00000000000,  # needs a new tag
 
                 # used by !... commands to get role id
                 'guest':                        406508496314564608,
