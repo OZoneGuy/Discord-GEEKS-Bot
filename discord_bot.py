@@ -77,7 +77,7 @@ async def on_message(message: discord.Message):
         '''
         # attempts to register user
         if "!register" in message.conents:
-            register(message) 
+            register(message)
         # gives them guest tag, maybe ask approval from mods using reactions
         elif "!guest" in message.contents:
             message.author.add_roles(message.guild.get_role(roles_dic['guest']))
@@ -141,7 +141,7 @@ async def register(message: discord.Message):
     Gives user Student tag if they have registered on google form
     '''
     # log action start
-    write_log(format("Registering {} ...", message.author.name))    
+    write_log(format("Registering {} ...", message.author.name))
     # check if user registered
     if (is_registered(message.author.name, message.author.discriminator)):
         role = message.guild.get_role(roles_dic['student']) # type: discord.Role
