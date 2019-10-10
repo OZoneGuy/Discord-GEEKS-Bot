@@ -44,6 +44,29 @@ roles_dic =   { ':flag_jp:':                    487415117361971200, # anime
 not_reg_msg     = "You are not registered {}. Please finish the google form in the pinned message."
 reg_msg         = "Welcome {}!"
 
+intro_message   = """Welcome to the McMaster Geeks Discord server!
+If you would like access to the channels (else why would you be here?) you need to finish this [google form](https://goo.gl/forms/phEbKvQzTi6MlIQ12) then come back here and type `!register`. I will take of the rest!
+
+[One more thing!](https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi0tqn98ZDlAhVik-AKHfLoAesQjRx6BAgBEAQ&url=%2Furl%3Fsa%3Di%26source%3Dimages%26cd%3D%26ved%3D%26url%3Dhttp%253A%252F%252Fbrushstrokesofatheonerd.com%252Fone-more-thing.html%26psig%3DAOvVaw1gm_CEu7MLq8m9jlL0Z_3Y%26ust%3D1570769345498314&psig=AOvVaw1gm_CEu7MLq8m9jlL0Z_3Y&ust=1570769345498314) To distinguish yourself from other and help others know you better, you might want to get a tag! Just simply add the reaction that matches the tag you want and voila!
+```
+:blank: :flag_jp: Anime
+:blank: :pick: Minecraft
+:blank: :vs: Smash
+:blank: :feet: Pokémon
+:blank: :large_blue_diamond: Tetris
+:blank: :game_die: Board Games
+:blank: :tophat:  Tabletop
+:blank: :dragon_face: DnD
+:blank: :flower_playing_cards: TCG
+:blank: :trophy: eSports
+:blank: :video_game: Videogames
+:blank: :crossed_swords: MMO
+```
+> Joining out server has never been easier! - @OzoneGuy#2203
+You see this ↑
+So if anything happens make sure to bother him. He likes the attention!
+"""
+
 # takes a text and logs into file with timestamp
 def write_log(text: str):
     text = str(datetime.now()) + " - " + text + "\n"
