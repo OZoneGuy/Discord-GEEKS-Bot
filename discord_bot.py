@@ -154,13 +154,13 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
         role = guild.get_role(roles_dic[emoji_name]) # type: discord.Role
 
         if role in member.roles:
-            await channel.send("You already have this role! Remove the reaction to remove your role.").delete(delay=3)
+            await channel.send("You already have this role! Remove the reaction to remove your role.", delete_after=3)
             write_log("{} tried to take already owned role, {}".format(member.name, role.name))
         else:
             # add member role
             member.add_role(role)
             # print message and delete after 3 seconds
-            await channel.send("Added {} tag. {}.".format(role.name, member.mention)).delete(delay=3)
+            await channel.send("Added {} tag. {}.".format(role.name, member.mention), delete_after=3)
             write_log("Given {} tag to {}.".format(role.name, member.name))
         pass
     pass
