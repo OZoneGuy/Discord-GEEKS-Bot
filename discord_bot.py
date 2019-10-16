@@ -94,11 +94,13 @@ async def on_message(message: discord.Message):
     Called when a user sends a message in a chat the bot can access, server channels, DMs, etc.
     Used to react to messages asking for registration.
     '''
+    if message.author == client.user:
+        return
+    if '!demo' in message.content:
+        await welcome_message(message)
+        pass
     if message.channel.id == dev_channel:
         # no dev commands yet
-        if '!demo' in message.content:
-            welcome_message(message)
-            pass
         pass
     # Used for registering users
     elif message.channel.id == reg_channel:
@@ -129,13 +131,13 @@ async def on_raw_reaction_remove(payload: discord.RawReactionActionEvent):
 
     if payload.message_id == role_message_id:
         # remove member role
-        member.remove_role(role)
+        await member.remove_roles(role)
         # print message and delete after 3 seconds
         await channel.send(content="Removed {} tag. {}.".format(role.name, member.mention), delete_after=3)
         write_log("Removed {} from {}".format(role.name, member.name))
 
     if payload.message_id == registration_message_id:
-        await channel.send(content="Not sure what you are trying to. For assistance please contact @ZoneGuy.", delete_aftet=3)
+        await channel.send(content="Not sure what you are trying to. For assistance please contact @ZoneGuy.", delete_after=3)
 
 @client.event
 async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
@@ -163,7 +165,7 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
             write_log("{} tried to take already owned role, {}".format(member.name, role.name))
         else:
             # add member role
-            member.add_role(role)
+            await member.add_roles(role)
             # print message and delete after 3 seconds
             await channel.send("Added {} tag. {}.".format(role.name, member.mention), delete_after=3)
             write_log("Given {} tag to {}.".format(role.name, member.name))
@@ -171,46 +173,46 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     # registration
     if payload.message_id == registration_message_id:
         # student
-        if role.id is 403701567305285633:
-            register(channel, member, role)
+        if role.id == 403701567305285633:
+            await register(channel, member, role)
         # guest
-        if role.id is 406508496314564608:
-            add_guest(channel , member, role)
+        if role.id == 406508496314564608:
+            await add_guest(channel , member, role)
 
 
 async def register(channel: discord.TextChannel, member: discord.Member, role: discord.Role):
     '''
     Gives user Student tag if they have registered on google form
     '''
-    write_log("Attempting to register {}".format(member.user_name))
+    write_log("Attempting to register {}".format(member.display_name))
     if 403701567305285633 in [role.id for role in member.roles]:
         await channel.send(content="You are already registered.", delete_after=3)
-        write_log("{} already has student tag".format(member.user_name))
+        write_log("{} already has student tag".format(member.display_name))
         return
-    if sql_handler.is_registered(member.user_name, member.user_disc):
-        member.add_roles(role)
+    if sql_handler.is_registered(member.display_name, member.user_disc):
+        await member.add_roles(role)
         await channel.send(content=reg_msg.format(member.mention), delete_after=3)
-        write_log("Successfully given {} student tag".format(member.user_name))
+        write_log("Successfully given {} student tag".format(member.display_name))
     else:
         await channel.send(content=not_reg_msg.format(member.mention), delete_after=3)
-        write_log("{} is not registered.".format(member.user_name))
+        write_log("{} is not registered.".format(member.display_name))
 
 async def add_guest(channel: discord.TextChannel, member: discord.Member, role: discord.Role):
     '''
     Give user `Guest` tag
     '''
-    write_log("Attempting to give guest tag to {}".format(member.user_name))
+    write_log("Attempting to give guest tag to {}".format(member.display_name))
     if 403701567305285633 in [role.id for role in member.roles]:
         await channel.send(content="You are registered, you don't the guest tag.", delete_after=3)
-        write_log("{} already has student tag.".format(member.user_name))
+        write_log("{} already has student tag.".format(member.display_name))
         return
     if 406508496314564608 in [role.id for role in member.roles]:
         await channel.send(content="You already have `Guest` role.", delete_after=3)
         write_log("{} already has guest tag")
         return
-    member.add_roles(role)
+    await member.add_roles(role)
     await channel.send(content="Welcome {}. You are a guest now!", delete_after=3)
-    write_log("Given {} guest tag.".format(member.user_name))
+    write_log("Given {} guest tag.".format(member.display_name))
 
 async def welcome_message(message: discord.Message):
     embed = discord.Embed(title="Sign up form.",
