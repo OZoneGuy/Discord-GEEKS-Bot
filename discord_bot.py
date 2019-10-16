@@ -2,12 +2,12 @@ import discord
 import json
 import sql_handler
 import sheets_interface
-import emoji
+from emoji import emojize, demojize
 from datetime import datetime
 
 version = "0.8.10.19 A"
 
-config = json.load(open("config.json"))
+config = json.load(open("config_test.json"))
 
 # channel IDs
 reg_channel = 406292711646167045
@@ -16,7 +16,8 @@ com_channel = 520680784949018639
 
 # role constants
 # TODO get actual message id
-role_message = 0000000
+registration_message_id : int = 00000000
+role_message_id : int = 0000000
 # TODO replace keys with emojis
 roles_dic =   { ':flag_jp:':                    487415117361971200, # anime
                 ':pick:':                       570307869279518720, # minecraft
@@ -26,7 +27,6 @@ roles_dic =   { ':flag_jp:':                    487415117361971200, # anime
                 ':flower_playing_cards:':       448741569650714216, # TCG
                 ':trophy:':                     619372177757831168, # eSports
                 ':game_die:':                   626161640768798730, # Boardgames
-
                 ':crossed_swords:':             619372523754094602, # MMO
                 ':tophat:':                     619371680992591882, # tabletop
                 ':video_game:':                 487415401131540490, # video games
@@ -36,7 +36,7 @@ roles_dic =   { ':flag_jp:':                    487415117361971200, # anime
                 'film':                             00000000000,        # needs a new tag
                 'pokemon_go':                             00000000000,  # needs a new tag
 
-                # used by !... commands to get role id
+                # need to change to emojis
                 'guest':                        406508496314564608,
                 'student':                      403701567305285633}
 
@@ -45,9 +45,9 @@ not_reg_msg     = "You are not registered {}. Please finish the google form in t
 reg_msg         = "Welcome {}!"
 
 intro_message   = """Welcome to the McMaster Geeks Discord server!
-If you would like access to the channels (else why would you be here?) you need to finish this [google form](https://goo.gl/forms/phEbKvQzTi6MlIQ12) then come back here and type `!register`. I will take of the rest!
+If you would like access to the channels,(else why would you be here?) you need to finish the google form linked below then come back here and add a reaction to the message below. I will take care of the rest!
 
-[One more thing!](https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi0tqn98ZDlAhVik-AKHfLoAesQjRx6BAgBEAQ&url=%2Furl%3Fsa%3Di%26source%3Dimages%26cd%3D%26ved%3D%26url%3Dhttp%253A%252F%252Fbrushstrokesofatheonerd.com%252Fone-more-thing.html%26psig%3DAOvVaw1gm_CEu7MLq8m9jlL0Z_3Y%26ust%3D1570769345498314&psig=AOvVaw1gm_CEu7MLq8m9jlL0Z_3Y&ust=1570769345498314) To distinguish yourself from other and help others know you better, you might want to get a tag! Just simply add the reaction that matches the tag you want and voila!
+One more thing! To distinguish yourself from other and help others know you better, you might want to get a tag! Just simply add the reaction that matches the tag you want and voila!
 ```
 :blank: :flag_jp: Anime
 :blank: :pick: Minecraft
@@ -67,23 +67,26 @@ You see this ↑
 So if anything happens make sure to bother him. He likes the attention!
 """
 
+register_message_text : str = """Registration reaction here!"""
+
+role_message_text : str = "Role reaction here!"
+
+
 # takes a text and logs into file with timestamp
 def write_log(text: str):
     text = str(datetime.now()) + " - " + text + "\n"
     f = open("GEEK.log", "a+")
     f.write(text)
     f.close()
-    pass
 
 #bot client
-client = discord.Client() # type: discord.Client()
+client : discord.Client = discord.Client()
 
 # on ready function - logs ready time
 @client.event
 async def on_ready():
     print("TheGeek is ready.")
     write_log("Ready.")
-    pass
 
 @client.event
 async def on_message(message: discord.Message):
@@ -92,6 +95,10 @@ async def on_message(message: discord.Message):
     Used to react to messages asking for registration.
     '''
     if message.channel.id == dev_channel:
+        # no dev commands yet
+        if '!demo' in message.content:
+            welcome_message(message)
+            pass
         pass
     # Used for registering users
     elif message.channel.id == reg_channel:
@@ -99,12 +106,8 @@ async def on_message(message: discord.Message):
         handles commands on register channel
         '''
         # attempts to register user
-        if "!register" in message.conents:
-            register(message)
-        # gives them guest tag, maybe ask approval from mods using reactions
-        elif "!guest" in message.contents:
-            message.author.add_roles(message.guild.get_role(roles_dic['guest']))
-    pass
+        if "!dewit" in message.content:
+            welcome_message(message)
 
 
 # add role depending on reaction to message
@@ -114,25 +117,25 @@ async def on_raw_reaction_remove(payload: discord.RawReactionActionEvent):
     Only does something when users react to a specific message
     Removes user role depending on reaction only if they are registered/students
     '''
-    if payload.message_id == role_message:
-        # gets text form of emoji
-        # if it a unicode emoji uses `emoji` library to get text form
-        # else discord provides the name
-        if(payload.emoji.is_unicode_emoji()):
-            emoji_name = emoji.demojize(payload.emoji.name)
-        else:
-            emoji_name = payload.emoji.name
-        guild = client.get_guild(payload.guild_id)  # type: discord.Guild
-        member = guild.get_member(payload.user_id) # type: discord.Member
-        channel = client.get_channel(payload.channel_id) # type: discord.TextChannel
-        role = guild.get_role(roles_dic[emoji_name]) # type: discord.Role
+    # gets text form of emoji
+    # if it a unicode emoji uses `emoji` library to get text form
+    # else discord provides the name
+    emoji_name = demojize(payload.emoji.name) if payload.emoji.is_unicode_emoji() else payload.emoji.name
+
+    guild: discord.Guild = client.get_guild(payload.guild_id)
+    member: discord.Member = guild.get_member(payload.user_id)
+    channel: discord.TextChannel = client.get_channel(payload.channel_id)
+    role: discord.Role = guild.get_role(roles_dic[emoji_name])
+
+    if payload.message_id == role_message_id:
         # remove member role
         member.remove_role(role)
         # print message and delete after 3 seconds
-        await channel.send("Removed {} tag. {}.".format(role.name, member.mention))
+        await channel.send(content="Removed {} tag. {}.".format(role.name, member.mention), delete_after=3)
         write_log("Removed {} from {}".format(role.name, member.name))
-        pass
-    pass
+
+    if payload.message_id == registration_message_id:
+        await channel.send(content="Not sure what you are trying to. For assistance please contact @ZoneGuy.", delete_aftet=3)
 
 @client.event
 async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
@@ -140,19 +143,21 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     Only does something when users react to a specific message
     Gives user role depending on reaction only if they are registered/students
     '''
-    if payload.message_id == role_message:
-        # gets text form of emoji
-        # if it a unicode emoji uses `emoji` library to get text form
-        # else discord provides the name
-        if(payload.emoji.is_unicode_emoji()):
-            emoji_name = emoji.demojize(payload.emoji.name)
-        else:
-            emoji_name = payload.emoji.name
-        guild = client.get_guild(payload.guild_id)  # type: discord.Guild
-        member = guild.get_member(payload.user_id) # type: discord.Member
-        channel = client.get_channel(payload.channel_id) # type: discord.TextChannel
-        role = guild.get_role(roles_dic[emoji_name]) # type: discord.Role
+    # ignores everything if user is bot
+    if payload.user_id == client.user.id:
+        return
 
+    # gets text form of emoji
+    # if it a unicode emoji uses `emoji` library to get text form
+    # else discord provides the name
+    emoji_name = demojize(payload.emoji.name) if payload.emoji.is_unicode_emoji() else payload.emoji.name
+
+    guild:discord.Guild           = client.get_guild(payload.guild_id)
+    member : discord.Member       = guild.get_member(payload.user_id)
+    channel : discord.TextChannel = client.get_channel(payload.channel_id)
+    role : discord.Role = guild.get_role(roles_dic[emoji_name])
+
+    if payload.message_id == role_message_id:
         if role in member.roles:
             await channel.send("You already have this role! Remove the reaction to remove your role.", delete_after=3)
             write_log("{} tried to take already owned role, {}".format(member.name, role.name))
@@ -162,31 +167,74 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
             # print message and delete after 3 seconds
             await channel.send("Added {} tag. {}.".format(role.name, member.mention), delete_after=3)
             write_log("Given {} tag to {}.".format(role.name, member.name))
-        pass
-    pass
+
+    # registration
+    if payload.message_id == registration_message_id:
+        # student
+        if role.id is 403701567305285633:
+            register(channel, member, role)
+        # guest
+        if role.id is 406508496314564608:
+            add_guest(channel , member, role)
 
 
-async def register(message: discord.Message):
+async def register(channel: discord.TextChannel, member: discord.Member, role: discord.Role):
     '''
     Gives user Student tag if they have registered on google form
     '''
-    # log action start
-    write_log(format("Registering {} ...", message.author.name))
-    # check if user registered
-    if (is_registered(message.author.name, message.author.discriminator)):
-        role = message.guild.get_role(roles_dic['student']) # type: discord.Role
-        message.author.add_role(role) # add role
-        write_log(format("Successfully registered {} !", message.author.name)) # log result
-        message.channel.send(content=reg_msg.format(message.author.mention), delete_after=3) # notify user success and delete notify message after 3 seconds
-        message.delete(delay=0.5) # delete user message
+    write_log("Attempting to register {}".format(member.user_name))
+    if 403701567305285633 in [role.id for role in member.roles]:
+        await channel.send(content="You are already registered.", delete_after=3)
+        write_log("{} already has student tag".format(member.user_name))
+        return
+    if sql_handler.is_registered(member.user_name, member.user_disc):
+        member.add_roles(role)
+        await channel.send(content=reg_msg.format(member.mention), delete_after=3)
+        write_log("Successfully given {} student tag".format(member.user_name))
     else:
-        write_log(format("Failed to register {}!", message.author.name)) # log result (failure)
-        message.channel.send(content=not_reg_msg.format(message.author.mention), delete_after=3) # notify user of failure then delete notify message
-        message.delete(delay=0.5) # delete user message
-    pass
+        await channel.send(content=not_reg_msg.format(member.mention), delete_after=3)
+        write_log("{} is not registered.".format(member.user_name))
 
-async def welcom_message():
-    await client.get_channel(406292711646167045).send(content=intro_message)
-    pass
+async def add_guest(channel: discord.TextChannel, member: discord.Member, role: discord.Role):
+    '''
+    Give user `Guest` tag
+    '''
+    write_log("Attempting to give guest tag to {}".format(member.user_name))
+    if 403701567305285633 in [role.id for role in member.roles]:
+        await channel.send(content="You are registered, you don't the guest tag.", delete_after=3)
+        write_log("{} already has student tag.".format(member.user_name))
+        return
+    if 406508496314564608 in [role.id for role in member.roles]:
+        await channel.send(content="You already have `Guest` role.", delete_after=3)
+        write_log("{} already has guest tag")
+        return
+    member.add_roles(role)
+    await channel.send(content="Welcome {}. You are a guest now!", delete_after=3)
+    write_log("Given {} guest tag.".format(member.user_name))
+
+async def welcome_message(message: discord.Message):
+    embed = discord.Embed(title="Sign up form.",
+                          url="https://goo.gl/forms/phEbKvQzTi6MlIQ12")
+    await message.channel.send(content=intro_message, embed=embed)
+
+    # send reg and role messages ad get them to add reactions
+    registration_message : discord.Message = await message.channel.send(content=register_message)
+    role_message : discord.Message = await message.channel.send(content=role_message_text)
+
+    # add reactions to role message
+    for i in range(12):
+        role_message.add_reaction(emojize(roles_dic.keys[i]))
+        pass
+
+    # add reactions to registration message
+    for i in range(18, 20):
+        registration_message.add_reaction(emojize(roles_dic.keys[i]))
+
+    # save messages ids
+    registration_message_id = registration_message.id
+    role_message_id = role_message.id
+    message.delete()
+
+
 
 client.run(config['token'])
