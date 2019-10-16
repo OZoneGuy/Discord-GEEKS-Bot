@@ -19,26 +19,26 @@ com_channel = 520680784949018639
 registration_message_id : int = 00000000
 role_message_id : int = 0000000
 # TODO replace keys with emojis
-roles_dic =   { ':flag_jp:':                    487415117361971200, # anime
+roles_dic =   { ':Japan:':                      487415117361971200, # anime
                 ':pick:':                       570307869279518720, # minecraft
                 ':large_blue_diamond:':         554029029905137676, # tetris
-                ':vs:':                         487415401085403157, # smash
-                ':feet:':                       488887610882916352, # pokemon
+                ':VS_button:':                  487415401085403157, # smash
+                ':paw_prints:':                 488887610882916352, # pokemon
                 ':flower_playing_cards:':       448741569650714216, # TCG
                 ':trophy:':                     619372177757831168, # eSports
                 ':game_die:':                   626161640768798730, # Boardgames
                 ':crossed_swords:':             619372523754094602, # MMO
-                ':tophat:':                     619371680992591882, # tabletop
+                ':top_hat:':                    619371680992591882, # tabletop
                 ':video_game:':                 487415401131540490, # video games
                 ':dragon_face:':                487415117420429312, # DnD
 
-                'events':                             00000000000,      # needs a new tag
-                'film':                             00000000000,        # needs a new tag
-                'pokemon_go':                             00000000000,  # needs a new tag
+                'events':                       00000000000,      # needs a new tag
+                'film':                         0000000000,        # needs a new tag
+                'pokemon_go':                   00000000000,  # needs a new tag
 
                 # need to change to emojis
-                'guest':                        406508496314564608,
-                'student':                      403701567305285633}
+                ':detective:':                  406508496314564608,
+                ':graduation_cap:':             403701567305285633}
 
 # Strings
 not_reg_msg     = "You are not registered {}. Please finish the google form in the pinned message."
@@ -48,20 +48,20 @@ intro_message   = """Welcome to the McMaster Geeks Discord server!
 If you would like access to the channels,(else why would you be here?) you need to finish the google form linked below then come back here and add a reaction to the message below. I will take care of the rest!
 
 One more thing! To distinguish yourself from other and help others know you better, you might want to get a tag! Just simply add the reaction that matches the tag you want and voila!
-```
-:blank: :flag_jp: Anime
-:blank: :pick: Minecraft
-:blank: :vs: Smash
-:blank: :feet: Pokémon
-:blank: :large_blue_diamond: Tetris
-:blank: :game_die: Board Games
-:blank: :tophat:  Tabletop
-:blank: :dragon_face: DnD
-:blank: :flower_playing_cards: TCG
-:blank: :trophy: eSports
-:blank: :video_game: Videogames
-:blank: :crossed_swords: MMO
-```
+
+    :flag_jp: Anime
+    :pick: Minecraft
+    :vs: Smash
+    :feet: Pokémon
+    :large_blue_diamond: Tetris
+    :game_die: Board Games
+    :tophat:  Tabletop
+    :dragon_face: DnD
+    :flower_playing_cards: TCG
+    :trophy: eSports
+    :video_game: Videogames
+    :crossed_swords: MMO
+
 > Joining out server has never been easier! - @OzoneGuy#2203
 You see this ↑
 So if anything happens make sure to bother him. He likes the attention!
