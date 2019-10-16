@@ -220,22 +220,26 @@ async def welcome_message(message: discord.Message):
     await message.channel.send(content=intro_message, embed=embed)
 
     # send reg and role messages ad get them to add reactions
-    registration_message : discord.Message = await message.channel.send(content=register_message)
+    registration_message : discord.Message = await message.channel.send(content=register_message_text)
     role_message : discord.Message = await message.channel.send(content=role_message_text)
+
+    dict_keys = list(roles_dic.keys())
 
     # add reactions to role message
     for i in range(12):
-        role_message.add_reaction(emojize(roles_dic.keys[i]))
+        await role_message.add_reaction(emojize(dict_keys[i]))
         pass
 
     # add reactions to registration message
-    for i in range(18, 20):
-        registration_message.add_reaction(emojize(roles_dic.keys[i]))
+    for i in range(15, 17):
+        await registration_message.add_reaction(emojize(dict_keys[i]))
 
     # save messages ids
+    global registration_message_id
+    global role_message_id
     registration_message_id = registration_message.id
     role_message_id = role_message.id
-    message.delete()
+    await message.delete()
 
 
 
