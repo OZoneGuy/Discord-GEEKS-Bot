@@ -2,6 +2,7 @@ import discord
 import json
 import sql_handler
 import sheets_interface
+import random
 from emoji import emojize, demojize
 from datetime import datetime
 
@@ -10,15 +11,16 @@ version = "0.8.10.19 A"
 config = json.load(open("config_test.json"))
 
 # channel IDs
-reg_channel = 406292711646167045
+reg_channel = 635285850015531028
 dev_channel = 385506783919079425
-com_channel = 520680784949018639
+role_channel = 635285966218592266
+general_channel = 378272844313919500
+
+# messages ids
+registration_message_id : int
+role_message_id : int
 
 # role constants
-# TODO get actual message id
-registration_message_id : int = 00000000
-role_message_id : int = 0000000
-# TODO replace keys with emojis
 roles_dic =   { ':Japan:':                      487415117361971200, # anime
                 ':pick:':                       570307869279518720, # minecraft
                 ':large_blue_diamond:':         554029029905137676, # tetris
@@ -44,11 +46,21 @@ roles_dic =   { ':Japan:':                      487415117361971200, # anime
 not_reg_msg     = "You are not registered {}. Please finish the google form in the pinned message."
 reg_msg         = "Welcome {}!"
 
-intro_message   = """Welcome to the McMaster Geeks Discord server!
-If you would like access to the channels,(else why would you be here?) you need to finish the google form linked below then come back here and add a reaction to the message below. I will take care of the rest!
+register_message_text   = """Welcome to the McMaster Geeks Discord server!
+If you would like access to the channels,(else why would you be here?) you need to finish the google form linked below then come back here and add a :mortar_board: reaction to this message. I will take care of the rest!
 
-One more thing! To distinguish yourself from other and help others know you better, you might want to get a tag! Just simply add the reaction that matches the tag you want and voila!
+If you are a guest, then add the :spy: reaction to get access!
 
+One more thing! To distinguish yourself from other and help others know you better, you might want to get a tag! Go to #role-channel Just simply add the reaction that matches the tag you want and voila!
+
+
+> Joining out server has never been easier! - @OzoneGuy#2203
+You see this ↑
+So if anything happens make sure to bother him. He has no friends and likes the attention!
+"""
+
+
+role_message_text : str = """Add a reaction to get a tag. Remove the reaction to lose the tag.
     :flag_jp: Anime
     :pick: Minecraft
     :vs: Smash
@@ -60,17 +72,30 @@ One more thing! To distinguish yourself from other and help others know you bett
     :flower_playing_cards: TCG
     :trophy: eSports
     :video_game: Videogames
-    :crossed_swords: MMO
+    :crossed_swords: MMO"""
 
-> Joining out server has never been easier! - @OzoneGuy#2203
-You see this ↑
-So if anything happens make sure to bother him. He likes the attention!
-"""
-
-register_message_text : str = """Registration reaction here!"""
-
-role_message_text : str = "Role reaction here!"
-
+# intro_messages
+intro_messages = [
+    "{} has joined the server! It's super effective.",
+    "Brace yourselves. {} just joined the server.",
+    "{} joined. You must construct additional pylons.",
+    "A {} has spawned in the server.",
+    "{} has joined. Can I get a heal?",
+    "{} just slid into the server.",
+    "Roses are red, violets are blue, {} joined this server with you",
+    "Hey! Listen! {} has joined!",
+    "We've been expecting you {}",
+    "{}. Hina is here",
+    "Hello. Is it {} you're looking for?",
+    "{} just arrived. Seems OP - please nerf",
+    "Ermagherd. {} is here.",
+    "It's dangerous to go alone, take {}!",
+    "{} has joined the battle bus.",
+    "{} just joined the party.",
+    "Welcome, {}. Stay awhile and listen.",
+    "Cheers, love! {} is here!",
+    "Where is {}? In the server!",
+]
 
 # takes a text and logs into file with timestamp
 def write_log(text: str):
@@ -193,6 +218,7 @@ async def register(channel: discord.TextChannel, member: discord.Member, role: d
         await member.add_roles(role)
         await channel.send(content=reg_msg.format(member.mention), delete_after=3)
         write_log("Successfully given {} student tag".format(member.display_name))
+        client.get_channel(general_channel).send(random.choice(intro_messages).format(member.mention))
     else:
         await channel.send(content=not_reg_msg.format(member.mention), delete_after=3)
         write_log("{} is not registered.".format(member.display_name))
@@ -217,11 +243,10 @@ async def add_guest(channel: discord.TextChannel, member: discord.Member, role: 
 async def welcome_message(message: discord.Message):
     embed = discord.Embed(title="Sign up form.",
                           url="https://goo.gl/forms/phEbKvQzTi6MlIQ12")
-    await message.channel.send(content=intro_message, embed=embed)
 
     # send reg and role messages ad get them to add reactions
-    registration_message : discord.Message = await message.channel.send(content=register_message_text)
-    role_message : discord.Message = await message.channel.send(content=role_message_text)
+    registration_message : discord.Message = await client.get_channel(reg_channel).send(content=register_message_text, embed=embed)
+    role_message : discord.Message = await client.get_channel(role_channel).send(content=role_message_text)
 
     dict_keys = list(roles_dic.keys())
 
