@@ -1,4 +1,5 @@
 import discord
+from discord.ext import commands
 import json
 import sql_handler
 import sheets_interface
@@ -6,7 +7,7 @@ import random
 from emoji import emojize, demojize
 from datetime import datetime
 
-version = "0.8.10.19 A"
+version = "0.19.10.19 A"
 
 config = json.load(open("config_test.json"))
 
@@ -105,7 +106,7 @@ def write_log(text: str):
     f.close()
 
 #bot client
-client : discord.Client = discord.Client()
+client : commands.Bot = commands.Bot(command_prefix="!")
 
 # on ready function - logs ready time
 @client.event
@@ -117,24 +118,17 @@ async def on_ready():
 async def on_message(message: discord.Message):
     '''
     Called when a user sends a message in a chat the bot can access, server channels, DMs, etc.
-    Used to react to messages asking for registration.
+    Not used for anything atm
     '''
     if message.author == client.user:
         return
-    if '!demo' in message.content:
-        await welcome_message(message)
         pass
     if message.channel.id == dev_channel:
-        # no dev commands yet
+        # command to start the reg messages
         pass
     # Used for registering users
     elif message.channel.id == reg_channel:
-        '''
-        handles commands on register channel
-        '''
-        # attempts to register user
-        if "!dewit" in message.content:
-            welcome_message(message)
+        pass
 
 
 # add role depending on reaction to message
@@ -241,6 +235,9 @@ async def add_guest(channel: discord.TextChannel, member: discord.Member, role: 
     write_log("Given {} guest tag.".format(member.display_name))
 
 async def welcome_message(message: discord.Message):
+    '''
+    Creates registration and role messages and stores their ids
+    '''
     embed = discord.Embed(title="Sign up form.",
                           url="https://goo.gl/forms/phEbKvQzTi6MlIQ12")
 
@@ -267,5 +264,24 @@ async def welcome_message(message: discord.Message):
     await message.delete()
 
 
+@client.command
+@commands.check(in_dev)
+async def dewit(ctx: commands.Context):
+    '''
+    executes order 'welcome'
+    '''
+    welcome_message(ctx.message)
+    pass
+
+async def in_dev(ctx: commands.Context) -> bool:
+    '''
+    checks if message came from dev
+    '''
+    return ctx.channel.id == dev_channel
+
+
+@client.command
+async def test(ctx: commands.Context):
+    ctx.channel.send(content="It's Alive!!!", delete_after=3)
 
 client.run(config['token'])
