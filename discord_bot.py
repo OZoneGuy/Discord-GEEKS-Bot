@@ -106,33 +106,28 @@ def write_log(text: str):
     f.close()
 
 #bot client
-client : commands.Bot = commands.Bot(command_prefix="!")
+bot : commands.Bot = commands.Bot(command_prefix='$')
+
 
 # on ready function - logs ready time
-@client.event
+@bot.listen()
 async def on_ready():
     print("TheGeek is ready.")
     write_log("Ready.")
 
-@client.event
+@bot.listen()
 async def on_message(message: discord.Message):
     '''
     Called when a user sends a message in a chat the bot can access, server channels, DMs, etc.
     Not used for anything atm
     '''
-    if message.author == client.user:
+    if message.author == bot.user:
         return
-        pass
-    if message.channel.id == dev_channel:
-        # command to start the reg messages
-        pass
-    # Used for registering users
-    elif message.channel.id == reg_channel:
         pass
 
 
 # add role depending on reaction to message
-@client.event
+@bot.listen()
 async def on_raw_reaction_remove(payload: discord.RawReactionActionEvent):
     '''
     Only does something when users react to a specific message
@@ -143,9 +138,9 @@ async def on_raw_reaction_remove(payload: discord.RawReactionActionEvent):
     # else discord provides the name
     emoji_name = demojize(payload.emoji.name) if payload.emoji.is_unicode_emoji() else payload.emoji.name
 
-    guild: discord.Guild = client.get_guild(payload.guild_id)
+    guild: discord.Guild = bot.get_guild(payload.guild_id)
     member: discord.Member = guild.get_member(payload.user_id)
-    channel: discord.TextChannel = client.get_channel(payload.channel_id)
+    channel: discord.TextChannel = bot.get_channel(payload.channel_id)
     role: discord.Role = guild.get_role(roles_dic[emoji_name])
 
     if payload.message_id == role_message_id:
@@ -158,14 +153,14 @@ async def on_raw_reaction_remove(payload: discord.RawReactionActionEvent):
     if payload.message_id == registration_message_id:
         await channel.send(content="Not sure what you are trying to. For assistance please contact @ZoneGuy.", delete_after=3)
 
-@client.event
+@bot.listen()
 async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     '''
     Only does something when users react to a specific message
     Gives user role depending on reaction only if they are registered/students
     '''
     # ignores everything if user is bot
-    if payload.user_id == client.user.id:
+    if payload.user_id == bot.user.id:
         return
 
     # gets text form of emoji
@@ -173,9 +168,9 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     # else discord provides the name
     emoji_name = demojize(payload.emoji.name) if payload.emoji.is_unicode_emoji() else payload.emoji.name
 
-    guild:discord.Guild           = client.get_guild(payload.guild_id)
+    guild:discord.Guild           = bot.get_guild(payload.guild_id)
     member : discord.Member       = guild.get_member(payload.user_id)
-    channel : discord.TextChannel = client.get_channel(payload.channel_id)
+    channel : discord.TextChannel = bot.get_channel(payload.channel_id)
     role : discord.Role = guild.get_role(roles_dic[emoji_name])
 
     if payload.message_id == role_message_id:
@@ -212,7 +207,7 @@ async def register(channel: discord.TextChannel, member: discord.Member, role: d
         await member.add_roles(role)
         await channel.send(content=reg_msg.format(member.mention), delete_after=3)
         write_log("Successfully given {} student tag".format(member.display_name))
-        client.get_channel(general_channel).send(random.choice(intro_messages).format(member.mention))
+        bot.get_channel(general_channel).send(random.choice(intro_messages).format(member.mention))
     else:
         await channel.send(content=not_reg_msg.format(member.mention), delete_after=3)
         write_log("{} is not registered.".format(member.display_name))
@@ -242,8 +237,8 @@ async def welcome_message(message: discord.Message):
                           url="https://goo.gl/forms/phEbKvQzTi6MlIQ12")
 
     # send reg and role messages ad get them to add reactions
-    registration_message : discord.Message = await client.get_channel(reg_channel).send(content=register_message_text, embed=embed)
-    role_message : discord.Message = await client.get_channel(role_channel).send(content=role_message_text)
+    registration_message : discord.Message = await bot.get_channel(reg_channel).send(content=register_message_text, embed=embed)
+    role_message : discord.Message = await bot.get_channel(role_channel).send(content=role_message_text)
 
     dict_keys = list(roles_dic.keys())
 
@@ -262,16 +257,8 @@ async def welcome_message(message: discord.Message):
     registration_message_id = registration_message.id
     role_message_id = role_message.id
     await message.delete()
-
-
-@client.command
-@commands.check(in_dev)
-async def dewit(ctx: commands.Context):
-    '''
-    executes order 'welcome'
-    '''
-    welcome_message(ctx.message)
     pass
+
 
 async def in_dev(ctx: commands.Context) -> bool:
     '''
@@ -280,8 +267,20 @@ async def in_dev(ctx: commands.Context) -> bool:
     return ctx.channel.id == dev_channel
 
 
-@client.command
-async def test(ctx: commands.Context):
-    ctx.channel.send(content="It's Alive!!!", delete_after=3)
+@bot.command()
+@commands.check(in_dev)
+async def dewit(ctx: commands.Context):
+    '''
+    executes order 'welcome'
+    '''
+    welcome_message(ctx.message)
+    pass
 
-client.run(config['token'])
+
+@bot.command()
+@bot.check(in_dev)
+async def hello(ctx):
+    print("test")
+    await ctx.channel.send(content="It's Alive!!!", delete_after=3)
+
+bot.run(config['token'])
