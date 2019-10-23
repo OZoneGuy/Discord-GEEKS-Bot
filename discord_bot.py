@@ -282,5 +282,6 @@ async def dewit(ctx: commands.Context):
 async def hello(ctx):
     print("test")
     await ctx.channel.send(content="It's Alive!!!", delete_after=3)
+    pass
 
 bot.run(config['token'])
