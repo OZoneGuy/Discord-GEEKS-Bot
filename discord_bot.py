@@ -9,7 +9,7 @@ from datetime import datetime
 
 version = "0.19.10.19 A"
 
-config = json.load(open("config_test.json"))
+config = json.load(open("config.json"))
 
 # channel IDs
 reg_channel = 635285850015531028
@@ -273,12 +273,12 @@ async def dewit(ctx: commands.Context):
     '''
     executes order 'welcome'
     '''
-    welcome_message(ctx.message)
+    await welcome_message(ctx.message)
     pass
 
 
 @bot.command()
-@bot.check(in_dev)
+@commands.check(in_dev)
 async def hello(ctx):
     print("test")
     await ctx.channel.send(content="It's Alive!!!", delete_after=3)
