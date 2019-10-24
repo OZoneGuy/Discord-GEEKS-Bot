@@ -27,7 +27,7 @@ roles_dic =   { ':Japan:':                      487415117361971200, # anime
                 ':large_blue_diamond:':         554029029905137676, # tetris
                 ':VS_button:':                  487415401085403157, # smash
                 ':paw_prints:':                 488887610882916352, # pokemon
-                ':flower_playing_cards:':       448741569650714216, # TCG
+                ':flower_playing_cards:':       487415696507142164, # TCG
                 ':trophy:':                     619372177757831168, # eSports
                 ':game_die:':                   626161640768798730, # Boardgames
                 ':crossed_swords:':             619372523754094602, # MMO
