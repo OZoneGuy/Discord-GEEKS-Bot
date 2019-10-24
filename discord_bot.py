@@ -55,7 +55,7 @@ If you are a guest, then add the :spy: reaction to get access!
 One more thing! To distinguish yourself from other and help others know you better, you might want to get a tag! Go to #role-channel Just simply add the reaction that matches the tag you want and voila!
 
 
-> Joining out server has never been easier! - @OzoneGuy#2203
+> Joining our server has never been easier! - @OzoneGuy#2203
 You see this ↑
 So if anything happens make sure to bother him. He has no friends and likes the attention!
 """
