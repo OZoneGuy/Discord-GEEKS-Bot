@@ -237,6 +237,8 @@ async def welcome_message(message: discord.Message):
                           url="https://goo.gl/forms/phEbKvQzTi6MlIQ12")
 
     # send reg and role messages ad get them to add reactions
+    await bot.get_channel(reg_channel).purge()
+    await bot.get_channel(role_channel).purge()
     registration_message : discord.Message = await bot.get_channel(reg_channel).send(content=register_message_text, embed=embed)
     role_message : discord.Message = await bot.get_channel(role_channel).send(content=role_message_text)
 
