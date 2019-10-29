@@ -188,8 +188,8 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
                     # print message and delete after 3 seconds
                     await channel.send("Added {} tag. {}.".format(role.name, member.mention), delete_after=3)
                     write_log("Given {} tag to {}.".format(role.name, member.name))
-    else:
-        await channel.send(content="You need to register first! Go to #sign-up and register.", delete_after=5)
+        else:
+            await channel.send(content="You need to register first! Go to #sign-up and register.", delete_after=5)
 
 
     # registration
