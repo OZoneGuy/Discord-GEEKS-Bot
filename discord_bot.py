@@ -174,7 +174,7 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     role : discord.Role = guild.get_role(roles_dic[emoji_name])
 
     if payload.message_id == role_message_id:
-        if "mcmaster student" in [role_string.lower() for role_string in member.roles.name]:
+        if "mcmaster student" in [role_string.name.lower() for role_string in member.roles]:
             if role in member.roles:
                 await channel.send("You already have this role! Remove the reaction to remove your role.", delete_after=3)
                 write_log("{} tried to take already owned role, {}".format(member.name, role.name))
