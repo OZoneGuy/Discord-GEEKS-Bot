@@ -207,7 +207,7 @@ async def register(channel: discord.TextChannel, member: discord.Member, role: d
         await channel.send(content="You are already registered.", delete_after=3)
         write_log("{} already has student tag".format(member.display_name))
         return
-    if sql_handler.is_registered(member.display_name, member.user_disc):
+    if sql_handler.is_registered(member.name, member.discriminator):
         await member.add_roles(role)
         await channel.send(content=reg_msg.format(member.mention), delete_after=3)
         write_log("Successfully given {} student tag".format(member.display_name))
