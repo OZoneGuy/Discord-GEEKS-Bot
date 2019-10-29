@@ -174,19 +174,20 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     role : discord.Role = guild.get_role(roles_dic[emoji_name])
 
     if payload.message_id == role_message_id:
-        if role in member.roles:
-            await channel.send("You already have this role! Remove the reaction to remove your role.", delete_after=3)
-            write_log("{} tried to take already owned role, {}".format(member.name, role.name))
-        else:
-            # add member role
-            try:
-                await member.add_roles(role)
-            except:
-                await channel.send(content="Oops! Something went wrong. We will investigate it shortly", delete_after=3)
-                write_log("Failed to give role. Emoji name: {}, Role ID: {}".format(emoji_name, roles_dic[emoji_name]))
-            # print message and delete after 3 seconds
-            await channel.send("Added {} tag. {}.".format(role.name, member.mention), delete_after=3)
-            write_log("Given {} tag to {}.".format(role.name, member.name))
+        if "mcmaster student" in [role_string.lower() for role_string in member.roles]:
+            if role in member.roles:
+                await channel.send("You already have this role! Remove the reaction to remove your role.", delete_after=3)
+                write_log("{} tried to take already owned role, {}".format(member.name, role.name))
+            else:
+                # add member role
+                try:
+                    await member.add_roles(role)
+                except:
+                    await channel.send(content="Oops! Something went wrong. We will investigate it shortly", delete_after=3)
+                    write_log("Failed to give role. Emoji name: {}, Role ID: {}".format(emoji_name, roles_dic[emoji_name]))
+                    # print message and delete after 3 seconds
+                    await channel.send("Added {} tag. {}.".format(role.name, member.mention), delete_after=3)
+                    write_log("Given {} tag to {}.".format(role.name, member.name))
 
     # registration
     if payload.message_id == registration_message_id:
