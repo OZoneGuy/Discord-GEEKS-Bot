@@ -15,7 +15,7 @@ _cursor.execute("CREATE TABLE IF NOT EXISTS user_lvl_n_msgs (_user_id INTEGER PR
 def insert_joke(post_id, title, body, author):
     _cursor.execute('SELECT * FROM jokes WHERE post_id = "' + str(post_id) + '"')
     v = _cursor.fetchall()
-    if len(v) is 0:
+    if len(v) == 0:
         _cursor.execute('INSERT INTO jokes(post_id, title, body, author) VALUES(?,?,?,?)', (str(post_id), str(title), str(body), str(author)))
         _db.commit()
         print('inserted joke')
