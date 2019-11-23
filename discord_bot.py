@@ -162,12 +162,10 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     # ignores everything if user is bot
     if payload.user_id == bot.user.id:
         return
-
     # gets text form of emoji
     # if it a unicode emoji uses `emoji` library to get text form
     # else discord provides the name
-    emoji_name = demojize(payload.emoji.name) if payload.emoji.is_unicode_emoji() else payload.emoji.name
-
+    emoji_name : str = demojize(payload.emoji.name) if payload.emoji.is_unicode_emoji() else payload.emoji.name
     guild:discord.Guild           = bot.get_guild(payload.guild_id)
     member : discord.Member       = guild.get_member(payload.user_id)
     channel : discord.TextChannel = bot.get_channel(payload.channel_id)
@@ -190,6 +188,8 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
                     write_log("Given {} tag to {}.".format(role.name, member.name))
         else:
             await channel.send(content="You need to register first! Go to #sign-up and register.", delete_after=5)
+            message : discord.Message = channel.fetch_message(payload.message_id)
+            await message.remove_reaction(emojize(emoji_name), member)
 
 
     # registration
