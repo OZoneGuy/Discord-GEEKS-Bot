@@ -37,6 +37,7 @@ def insert_form_response(time, user_name, name_prog, alumni, interests, email):
 
 
 def is_registered(user_name, user_disc):
+    sheets_interface.main()
     _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'{}%\''.format(user_name))
     if len(_cursor.fetchall()) > 0:
         return True
