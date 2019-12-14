@@ -28,7 +28,7 @@ def main():
     else:
         for row in values:
             try:
-                sql_handler.insert_form_response(row[0], row[1], row[2], True if row[3] is 'Yes' else False, row[4], row[5])
+                sql_handler.insert_form_response(row[0], row[1], row[2], True if row[3] == 'Yes' else False, row[4], row[5])
             except:
                 print('error')
 
