@@ -196,13 +196,14 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     if payload.message_id == registration_message_id:
         # student
         if role.id == 403701567305285633:
-            await register(channel, member, role)
+            if not await register(channel, member, role):
+                channel.fetch_message(payload.message_id).remove_reaction(emojize(emoji_name), member)
         # guest
         if role.id == 406508496314564608:
             await add_guest(channel , member, role)
 
 
-async def register(channel: discord.TextChannel, member: discord.Member, role: discord.Role):
+async def register(channel: discord.TextChannel, member: discord.Member, role: discord.Role) -> bool:
     '''
     Gives user Student tag if they have registered on google form
     '''
@@ -210,15 +211,17 @@ async def register(channel: discord.TextChannel, member: discord.Member, role: d
     if 403701567305285633 in [role.id for role in member.roles]:
         await channel.send(content="You are already registered.", delete_after=3)
         write_log("{} already has student tag".format(member.display_name))
-        return
+        return True
     if sql_handler.is_registered(member.name, member.discriminator):
         await member.add_roles(role)
         await channel.send(content=reg_msg.format(member.mention), delete_after=3)
         write_log("Successfully given {} student tag".format(member.display_name))
         bot.get_channel(general_channel).send(random.choice(intro_messages).format(member.mention))
+        return True
     else:
         await channel.send(content=not_reg_msg.format(member.mention), delete_after=3)
         write_log("{} is not registered.".format(member.display_name))
+        return False
 
 async def add_guest(channel: discord.TextChannel, member: discord.Member, role: discord.Role):
     '''
