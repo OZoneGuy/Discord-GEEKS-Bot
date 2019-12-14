@@ -237,7 +237,7 @@ async def add_guest(channel: discord.TextChannel, member: discord.Member, role: 
         write_log("{} already has guest tag")
         return
     await member.add_roles(role)
-    await channel.send(content="Welcome {}. You are a guest now!", delete_after=3)
+    await channel.send(content="Welcome {}. You are a guest now!".format(member.mention), delete_after=3)
     write_log("Given {} guest tag.".format(member.display_name))
 
 async def welcome_message(message: discord.Message):
