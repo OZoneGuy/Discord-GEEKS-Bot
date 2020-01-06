@@ -27,46 +27,27 @@ class Welcome(commands.Cog):
         '''
         Loads role_message_id, register_message_id, reg_channel, role_channel from json file
         '''
-
         with open('config.json', 'rw') as j_file :
             # get json data
-            j_data       = json.load(j_file)
-            try:
-                # try to  get reg_data, contains ids
-                reg_data = j_data['reg_data']
-            except KeyError as ignore:
-# Might move json data to json file and test for value instead
-                # if failed, loads and saves data to json file for future
-                reg_data = {'reg_date': {
-                    'dev_channel_id':   635285850015531028,
-                    'reg_channel_id':   635285850015531028,
-                    'role_channel_id':  635285966218592266,
-                    'reg_message_id':   0,
-                    'role_messsage_id': 0,
-                    'roles_emoji_dict': {
-                        # roles emojis
-                        ':Japan:':                487415117361971200, # anime
-                        ':pick:':                 570307869279518720, # minecraft
-                        ':large_blue_diamond:':   554029029905137676, # tetris
-                        ':VS_button:':            487415401085403157, # smash
-                        ':paw_prints:':           488887610882916352, # pokemon
-                        ':flower_playing_cards:': 487415696507142164, # TCG
-                        ':trophy:':               619372177757831168, # eSports
-                        ':game_die:':             626161640768798730, # Boardgames
-                        ':crossed_swords:':       619372523754094602, # MMO
-                        ':top_hat:':              619371680992591882, # tabletop
-                        ':video_game:':           487415401131540490, # video games
-                        ':dragon_face:':          487415117420429312, # DnD
+            reg_data       = json.load(j_file)['reg_data']
+            global role_channel_id
+            global reg_channel_id
+            global register_message_id
+            global role_message_id
+            global role_dict
 
-                        #'events':     00000000000,      # needs a new tag
-                        #'film':       0000000000,        # needs a new tag
-                        #'pokemon_go': 00000000000,  # needs a new tag
+            # get roles/emoji dict
+            role_dict = reg_data['roles_emoji_dict']
 
-                        # Registration emojis
-                        ':detective:':      406508496314564608,
-                        ':graduation_cap:': 403701567305285633}
+            # get channel ids
+            reg_channel_id = reg_data['reg_channel_id']
+            role_channel_id = reg_data['role_channel_id']
 
-                }}
+            # check message id
+            register_message_id = reg_data['reg_message_id']
+
+            # check if it is 0, if it is 0 then it needs initialization
+            if register_message_id is 0:
                 # get relevant channels
                 reg_channel :  discord.TextChannel = await self.bot.get_channel(reg_data['reg_channel_id'])
                 role_channel : discord.TextChannel = await self.bot.get_channel(reg_data['role_channel_id'])
@@ -106,19 +87,9 @@ class Welcome(commands.Cog):
                 j_data['reg_data'] = reg_data
                 json.dump(j_data, 'config.json')
                 pass
-            global reg_channel_id
-            global reg_message_id
-            global role_channel_id
-            global role_message_id
-            global role_dict
 
-            reg_channel_id  = reg_data['reg_channel_id']
-            reg_message_id  = reg_data['reg_message_id']
             role_channel_id = reg_data['role_channel_id']
             role_message_id = reg_data['role_message_id']
-
-
-            role_dict = reg_data['role_emoji_dict']
         pass
 
     # get message string from json file
