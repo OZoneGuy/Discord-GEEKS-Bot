@@ -1,6 +1,7 @@
 *.db
 *.log
 *.json
+!messages.json
 **/discord-venv
 .idea/
 __pycache__/
