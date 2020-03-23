@@ -180,12 +180,13 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
                 # add member role
                 try:
                     await member.add_roles(role)
-                except:
-                    await channel.send(content="Oops! Something went wrong. We will investigate it shortly", delete_after=3)
-                    write_log("Failed to give role. Emoji name: {}, Role ID: {}".format(emoji_name, roles_dic[emoji_name]))
                     # print message and delete after 3 seconds
                     await channel.send("Added {} tag. {}.".format(role.name, member.mention), delete_after=3)
                     write_log("Given {} tag to {}.".format(role.name, member.name))
+                except:
+                    # failed to give tag message, delete after 3 seconds
+                    await channel.send(content="Oops! Something went wrong. We will investigate it shortly", delete_after=3)
+                    write_log("Failed to give role. Emoji name: {}, Role ID: {}".format(emoji_name, roles_dic[emoji_name]))
         else:
             await channel.send(content="You need to register first! Go to #sign-up and register.", delete_after=5)
             message : discord.Message = channel.fetch_message(payload.message_id)
