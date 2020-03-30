@@ -169,10 +169,16 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     guild:discord.Guild           = bot.get_guild(payload.guild_id)
     member : discord.Member       = guild.get_member(payload.user_id)
     channel : discord.TextChannel = bot.get_channel(payload.channel_id)
-    if payload.channel_id != role_channel or payload.channel_id != reg_channel:
+    # if payload.channel_id != role_channel or payload.channel_id != reg_channel:
+    #     return
+
+    role : discord.Role
+    try:
+        role = guild.get_role(roles_dic[emoji_name])
+        pass
+    except:
         return
 
-    role : discord.Role = guild.get_role(roles_dic[emoji_name])
 
     if payload.message_id == role_message_id:
         if "mcmaster student" in [role_string.name.lower() for role_string in member.roles]:
