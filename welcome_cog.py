@@ -211,6 +211,8 @@ class Welcome(commands.Cog):
         if emoji not in self.role_dict:
             return
         role = guild.get_role(self.role_dict[emoji])
+        if role not in member.roles:
+            return
 
         if payload.message_id == self.role_message_id:
             # remove member role
