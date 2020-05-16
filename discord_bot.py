@@ -51,6 +51,7 @@ async def status(ctx):
 
 
 @bot.command()
+@commands.check(in_dev)
 async def reloadWelcome(ctx):
     bot.reload_extension('welcome_cog')
     await bot.get_cog('Welcome').load_ids()
