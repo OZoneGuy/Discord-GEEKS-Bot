@@ -38,6 +38,7 @@ async def on_ready():
     """
     print("TheGeek is ready.")
     bot.add_cog(Welcome(bot))
+    await bot.get_cog('Welcome').load_ids()
     write_log("Ready.")
 
 
