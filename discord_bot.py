@@ -10,7 +10,7 @@ from welcome_cog import Welcome
 
 VERSION = "0.15.5.20 A"
 
-config = json.load(open("config.json"))
+config = json.load(open("config_test.json"))
 
 # channel IDs
 DEV_CHANNEL = 385506783919079425
