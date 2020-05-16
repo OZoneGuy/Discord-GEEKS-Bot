@@ -1,14 +1,12 @@
 {
-    "reg_message_text": "Welcome to the McMaster Geeks Discord server!\\nIf you would like access to the channels,(else why would you be here?) you need to finish the google form linked below then come back here and add a :mortar_board: reaction to this message. I will take care of the rest!\\n\\nIf you are a guest, then add the :spy: reaction to get access!\\n\\nOne more thing! To distinguish yourself from other and help others know you better, you might want to get a tag! Go to #role-channel Just simply add the reaction that matches the tag you want and voila!\\n\\n> Joining our server has never been easier! - {0.mention}\\nYou see this ↑\\nSo if anything happens make sure to bother him. He has no friends and likes the attention!",
+    "reg_message": "Welcome to the McMaster Geeks Discord server!\nIf you would like access to the channels,(else why would you be here?) you need to finish the google form linked below then come back here and add a :mortar_board: reaction to this message. I will take care of the rest!\n\nIf you are a guest, then add the :spy: reaction to get access!\n\nOne more thing! To distinguish yourself from other and help others know you better, you might want to get a tag! Go to {role_channel.mention} Just simply add the reaction that matches the tag you want and voila!\n\n> Joining our server has never been easier! - {user.mention}\nYou see this ↑\nSo if anything happens make sure to bother him. He has no friends and likes the attention!",
 
-    "reg_message_text_2": "",
-
-    "role_messsage_text": "Add a reaction to get a tag. Remove the reaction to lose the tag.\\n    :flag_jp: Anime\\n    :pick: Minecraft\\n    :vs: Smash\\n    :feet: Pokémon\\n    :large_blue_diamond: Tetris\\n    :game_die: Board Games\\n    :tophat:  Tabletop\\n    :dragon_face: DnD\\n    :flower_playing_cards: TCG\\n    :trophy: eSports\\n    :video_game: Videogames\\n    :crossed_swords: MMO",
+    "role_message": "Add a reaction to get a tag. Remove the reaction to lose the tag.\n    :flag_jp: Anime\n    :pick: Minecraft\n    :vs: Smash\n    :feet: Pokémon\n    :large_blue_diamond: Tetris\n    :game_die: Board Games\n    :tophat:  Tabletop\n    :dragon_face: DnD\n    :flower_playing_cards: TCG\n    :trophy: eSports\n    :video_game: Videogames\n    :crossed_swords: MMO",
 
     "reg_suc_message": "Welcome {}.",
     "not_reg_message": "You are not registered {}. Please finish the google form in the pinned message.",
     "guest_message": "Welcome {}! You are a guest now!`",
-    "role_fail": "You need to register first! Go to #sign-up and register.",
+    "role_fail": "You need to register first! Go to {reg.mention} and register.",
     "role_suc":"Enjoy your new tag {}.",
     "role_exist":"You already have this tag."
 }
