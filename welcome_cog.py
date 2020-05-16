@@ -1,15 +1,15 @@
-from discord.ext import commands  # commands classes
+import json
+
 import discord
+from discord.ext import commands  # commands classes
+from emoji import demojize, emojize
 
 import sql_handler  # sql interface
-
-import json
-from emoji import emojize, demojize
 
 
 class Welcome(commands.Cog):
 
-    async def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self._last_member = None
 
@@ -24,7 +24,7 @@ class Welcome(commands.Cog):
         Loads role_message_id, register_message_id, reg_channel_id,
         role_channel_id from json file
         '''
-        with open('config_test.json', 'r+') as j_file:
+        with open('config_test.json', 'r') as j_file:
             # get json data
             j_data = json.load(j_file)
             reg_data = j_data['reg_data']
@@ -43,14 +43,14 @@ class Welcome(commands.Cog):
             # initialisation
             if self.register_message_id == 0:
                 # get relevant channels
-                reg_channel: discord.TextChannel = await self.bot.get_channel(
+                reg_channel: discord.TextChannel = self.bot.get_channel(
                     self.reg_channel_id)
-                role_channel: discord.TextChannel = await self.bot.get_channel(
+                role_channel: discord.TextChannel = self.bot.get_channel(
                     self.role_channel_id)
 
                 # delete all messages
-                reg_channel.purge()
-                role_channel.purge()
+                await reg_channel.purge()
+                await role_channel.purge()
 
                 # prepare embedded link for reg message
                 embed: discord.Embed = discord.Embed(
@@ -60,7 +60,8 @@ class Welcome(commands.Cog):
                 # send messages and get messages for future references
                 reg_message: discord.Message = await reg_channel.send(
                     content=self.get_message_from_json('reg_message').format(
-                        self.bot.fetch_user(415154371924590593).mention),
+                        user=self.bot.get_user(415154371924590593),
+                        role_channel=role_channel),
                     embed=embed)
                 role_message: discord.Message = await role_channel.send(
                     content=self.get_message_from_json('role_message'))
@@ -75,18 +76,18 @@ class Welcome(commands.Cog):
 
                 # add reactions to registration message
                 for i in range(15, 17):
-                    await role_message.add_reaction(
+                    await reg_message.add_reaction(
                         emojize(emoji_dict_keys[i]))
 
                 # save ids to dictionary to be save in json file
                 reg_data['reg_message_id'] = reg_message.id
                 reg_data['role_message_id'] = role_message.id
 
-                # save data to dictionary and json file
-                j_data['reg_data'] = reg_data
-                json.dump(j_data, 'config_test.json')
             self.role_channel_id = reg_data['role_channel_id']
             self.role_message_id = reg_data['role_message_id']
+            # save data to dictionary and json file
+            j_data['reg_data'] = reg_data
+            json.dump(j_data, open('config_test.json', 'w'))
 
     # get message string from json file
     def get_message_from_json(self, data: str) -> str:
@@ -117,27 +118,27 @@ class Welcome(commands.Cog):
         role: discord.Role = guild.get_role(self.role_dict[emoji])
 
         # handles reactions to reg message
-        if payload.message_id == self.reg_message_id:
+        if payload.message_id == self.register_message_id:
             # the user wants to get student tag
             if emoji == ":graduation_cap:":
-                self.register(channel, member, emoji)
+                await self.register(channel, member, emoji, role)
             # the user wants to get guest tag
-            if emoji == ":spy:":
-                await self.add_guest(channel, member)
+            if emoji == ":detective:":
+                await self.add_guest(channel, member, emoji, role)
 
         if payload.message_id == self.role_message_id:
-            await self.give_role(channel, member, role)
+            await self.give_role(channel, member, emoji, role)
 
     async def register(self, channel: discord.TextChannel,
-                       member: discord.Member, emoji: str) -> bool:
+                       member: discord.Member, emoji: str,
+                       role: discord.Role) -> bool:
         """
         Checks if the user is registered.
         If they are give them student role and send affirmative message,
         else send them negative message.
         """
-        if sql_handler.is_registered(member.name, member.user.discriminator):
-            await member.add_roles(self.bot.get_role(
-                self.role_dict[':graduation_cap:']))  # give role
+        if sql_handler.is_registered(member.name, member.discriminator):
+            await member.add_roles(role)  # give role
             # send a confirmation message
             await channel.send(content=self.get_message_from_json(
                 "reg_suc_message").format(member.mention), delete_after=3)
@@ -145,18 +146,27 @@ class Welcome(commands.Cog):
             # send a negative message
             await channel.send(content=self.get_message_from_json(
                 "not_reg_message").format(member.mention), delete_after=3)
-            channel.fetch_message(self.register_message_id).remove_reaction(
-                emojize(emoji), member)  # remove user reaction from message
+
+        await (await channel.fetch_message(
+            self.register_message_id)).remove_reaction(emojize(
+                emoji), member)  # remove user reaction from message
 
     async def add_guest(self, channel: discord.TextChannel,
-                        member: discord.Member):
-        await member.add_roles(self.bot.get_tole(
-            self.role_dict[':detective:']))  # give guest role
+                        member: discord.Member, emoji: str,
+                        role: discord.Role):
+        """
+        Give user the Guest tag
+        """
+        await member.add_roles(role)  # give guest role
         await channel.send(content=self.get_message_from_json(
             "guest_message").format(member.mention), delete_after=3)
+        await (await channel.fetch_message(
+            self.register_message_id)).remove_reaction(emojize(
+                emoji), member)  # remove user reaction from message
 
     async def give_role(self, channel: discord.TextChannel,
-                        member: discord.Member, role: discord.Role):
+                        member: discord.Member, emoji: str,
+                        role: discord.Role):
         """
         Gives the member a role/tag.
         First it checks if the member is register,
@@ -164,8 +174,12 @@ class Welcome(commands.Cog):
         """
         if "mcmaster student" not in [role.name.lower
                                       for role in member.roles]:
-            await channel.send(content=self.get_message_from_json("role_fail"),
-                               delete_after=3)
+            await channel.send(content=self.get_message_from_json(
+                "role_fail").format(reg=self.bot.get_channel(
+                    self.reg_channel_id)), delete_after=3)
+            await (await channel.fetch_message(
+                self.role_message_id)).remove_reaction(emojize(
+                    emoji), member)  # remove user reaction from message
         else:
             if role not in member.role:
                 await member.add_roles(role)
