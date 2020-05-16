@@ -3,10 +3,10 @@ The main discord bot script.
 """
 
 import json
-from datetime import datetime
 
 from discord.ext import commands
-from welcome_cog import Welcome
+
+from bot_utils import write_log
 
 VERSION = "0.15.5.20 A"
 
@@ -14,16 +14,6 @@ config = json.load(open("config_test.json"))
 
 # channel IDs
 DEV_CHANNEL = 385506783919079425
-
-
-def write_log(text: str):
-    """
-    Write 'str' as a log into the log file.
-    """
-    text = str(datetime.now()) + " - " + text + "\n"
-    f_log = open("GEEK.log", "a+")
-    f_log.write(text)
-    f_log.close()
 
 
 # bot client

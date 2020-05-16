@@ -6,6 +6,8 @@ from emoji import demojize, emojize
 
 import sql_handler  # sql interface
 
+from bot_utils import get_message_from_json
+
 
 class Welcome(commands.Cog):
 
@@ -59,12 +61,12 @@ class Welcome(commands.Cog):
 
                 # send messages and get messages for future references
                 reg_message: discord.Message = await reg_channel.send(
-                    content=self.get_message_from_json('reg_message').format(
+                    content=get_message_from_json('reg_message').format(
                         user=self.bot.get_user(415154371924590593),
                         role_channel=role_channel),
                     embed=embed)
                 role_message: discord.Message = await role_channel.send(
-                    content=self.get_message_from_json('role_message'))
+                    content=get_message_from_json('role_message'))
 
                 # get a list of emojis
                 emoji_dict_keys = list(self.role_dict)
@@ -90,9 +92,6 @@ class Welcome(commands.Cog):
             json.dump(j_data, open('config_test.json', 'w'))
 
     # get message string from json file
-    def get_message_from_json(self, data: str) -> str:
-        messages: dict = json.load(open('messages.json'))
-        return messages[data]
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self,
@@ -140,11 +139,11 @@ class Welcome(commands.Cog):
         if sql_handler.is_registered(member.name, member.discriminator):
             await member.add_roles(role)  # give role
             # send a confirmation message
-            await channel.send(content=self.get_message_from_json(
+            await channel.send(content=get_message_from_json(
                 "reg_suc_message").format(member.mention), delete_after=3)
         else:
             # send a negative message
-            await channel.send(content=self.get_message_from_json(
+            await channel.send(content=get_message_from_json(
                 "not_reg_message").format(member.mention), delete_after=3)
 
         await (await channel.fetch_message(
@@ -158,7 +157,7 @@ class Welcome(commands.Cog):
         Give user the Guest tag
         """
         await member.add_roles(role)  # give guest role
-        await channel.send(content=self.get_message_from_json(
+        await channel.send(content=get_message_from_json(
             "guest_message").format(member.mention), delete_after=3)
         await (await channel.fetch_message(
             self.register_message_id)).remove_reaction(emojize(
@@ -174,7 +173,7 @@ class Welcome(commands.Cog):
         """
         if "mcmaster student" not in [role.name.lower
                                       for role in member.roles]:
-            await channel.send(content=self.get_message_from_json(
+            await channel.send(content=get_message_from_json(
                 "role_fail").format(reg=self.bot.get_channel(
                     self.reg_channel_id)), delete_after=3)
             await (await channel.fetch_message(
@@ -183,10 +182,10 @@ class Welcome(commands.Cog):
         else:
             if role not in member.role:
                 await member.add_roles(role)
-                await channel.send(content=self.get_message_from_json(
+                await channel.send(content=get_message_from_json(
                     "role_suc").format(member.mention), delete_after=3)
             else:
-                await channel.send(content=self.get_message_from_json(
+                await channel.send(content=get_message_from_json(
                     "role_exist"), delte_after=3)
 
     @commands.Cog.listener()
