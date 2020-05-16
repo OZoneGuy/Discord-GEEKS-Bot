@@ -221,7 +221,7 @@ class Welcome(commands.Cog):
 
         if payload.message_id == self.register_message_id:
             await channel.send(content="Not sure what you are trying to. For"
-                               "assistance please contact"
+                               " assistance please contact "
                                "{user.mention}".format(user=self.bot.get_user(
                                    415154371924590593)), delete_after=3)
 
