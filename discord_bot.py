@@ -27,7 +27,7 @@ async def on_ready():
     Called when the bot is ready.
     """
     print("TheGeek is ready.")
-    bot.add_cog(Welcome(bot))
+    bot.load_extension('welcome_cog')
     await bot.get_cog('Welcome').load_ids()
     write_log("Ready.")
 
@@ -48,6 +48,12 @@ async def status(ctx):
     print("test")
     await ctx.channel.send(content="Up and Running. Version: " + VERSION,
                            delete_after=3)
+
+
+@bot.command()
+async def reloadWelcome(ctx):
+    bot.reload_extension('welcome_cog')
+    await bot.get_cog('Welcome').load_ids()
 
 
 bot.run(config['token'])
