@@ -193,7 +193,8 @@ class Welcome(commands.Cog):
                                      payload: discord.RawReactionActionEvent):
         '''
         Only does something when users react to a specific message
-        Removes user role depending on reaction only if they are registered/students
+        Removes user role depending on reaction only if they
+        are registered/students
         '''
         # gets text form of emoji
         # if it a unicode emoji uses `emoji` library to get text form
@@ -223,3 +224,7 @@ class Welcome(commands.Cog):
                                "assistance please contact"
                                "{user.mention}".format(user=self.bot.get_user(
                                    415154371924590593)), delete_after=3)
+
+
+def setup(bot):
+    bot.add_cog(Welcome(bot))
