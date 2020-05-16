@@ -41,9 +41,9 @@ class Welcome(commands.Cog):
             if self.register_message_id == 0:
                 # get relevant channels
                 reg_channel: discord.TextChannel = await self.bot.get_channel(
-                    reg_data['reg_channel_id'])
+                    self.reg_channel_d)
                 role_channel: discord.TextChannel = await self.bot.get_channel(
-                    reg_data['role_channel_id'])
+                    self.role_channel_id)
 
                 # delete all messages
                 reg_channel.purge()
@@ -63,7 +63,7 @@ class Welcome(commands.Cog):
                     content=self.get_message_from_json('role_message'))
 
                 # get a list of emojis
-                emoji_dict_keys = list(reg_data['roles_emoji_dict'].keys())
+                emoji_dict_keys = list(self.role_dict)
 
                 # add reactions to role message
                 for i in range(12):
