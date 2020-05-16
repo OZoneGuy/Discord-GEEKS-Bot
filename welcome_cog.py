@@ -187,4 +187,40 @@ class Welcome(commands.Cog):
                     "role_suc").format(member.mention), delete_after=3)
             else:
                 await channel.send(content=self.get_message_from_json(
-                    "role_exit"), delte_after=3)
+                    "role_exist"), delte_after=3)
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self,
+                                     payload: discord.RawReactionActionEvent):
+        '''
+        Only does something when users react to a specific message
+        Removes user role depending on reaction only if they are registered/students
+        '''
+        # gets text form of emoji
+        # if it a unicode emoji uses `emoji` library to get text form
+        # else discord provides the name
+        if payload.user_id == self.bot.user.id:
+            return
+
+        emoji: str = demojize(payload.emoji.name)
+        guild: discord.Guild = self.bot.get_guild(payload.guild_id)
+        member: discord.Member = guild.get_member(payload.user_id)
+        channel: discord.TextChannel = self.bot.get_channel(payload.channel_id)
+        role: discord.Role
+
+        if emoji not in self.role_dict:
+            return
+        role = guild.get_role(self.role_dict[emoji])
+
+        if payload.message_id == self.role_message_id:
+            # remove member role
+            await member.remove_roles(role)
+            # print message and delete after 3 seconds
+            await channel.send(content="Removed {} tag. {}.".format(
+                role.name, member.mention), delete_after=3)
+
+        if payload.message_id == self.register_message_id:
+            await channel.send(content="Not sure what you are trying to. For"
+                               "assistance please contact"
+                               "{user.mention}".format(user=self.bot.get_user(
+                                   415154371924590593)), delete_after=3)
