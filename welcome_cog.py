@@ -171,7 +171,7 @@ class Welcome(commands.Cog):
         First it checks if the member is register,
         have the mcmaster student tag.
         """
-        if "mcmaster student" not in [role.name.lower
+        if "mcmaster student" not in [role.name.lower()
                                       for role in member.roles]:
             await channel.send(content=get_message_from_json(
                 "role_fail").format(reg=self.bot.get_channel(
@@ -180,7 +180,7 @@ class Welcome(commands.Cog):
                 self.role_message_id)).remove_reaction(emojize(
                     emoji), member)  # remove user reaction from message
         else:
-            if role not in member.role:
+            if role not in member.roles:
                 await member.add_roles(role)
                 await channel.send(content=get_message_from_json(
                     "role_suc").format(member.mention), delete_after=3)
