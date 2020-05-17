@@ -26,7 +26,7 @@ class Welcome(commands.Cog):
         Loads role_message_id, register_message_id, reg_channel_id,
         role_channel_id from json file
         '''
-        with open('config_test.json', 'r') as j_file:
+        with open('config.json', 'r') as j_file:
             # get json data
             j_data = json.load(j_file)
             reg_data = j_data['reg_data']
@@ -89,7 +89,7 @@ class Welcome(commands.Cog):
             self.role_message_id = reg_data['role_message_id']
             # save data to dictionary and json file
             j_data['reg_data'] = reg_data
-            json.dump(j_data, open('config_test.json', 'w'))
+            json.dump(j_data, open('config.json', 'w'))
 
     # get message string from json file
 
