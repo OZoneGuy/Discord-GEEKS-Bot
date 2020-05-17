@@ -48,6 +48,7 @@ async def status(ctx):
     print("test")
     await ctx.channel.send(content="Up and Running. Version: " + VERSION,
                            delete_after=3)
+    await ctx.message.delete()
 
 
 @bot.command()
