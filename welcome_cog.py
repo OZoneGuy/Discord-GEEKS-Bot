@@ -146,9 +146,9 @@ class Welcome(commands.Cog):
             await channel.send(content=get_message_from_json(
                 "not_reg_message").format(member.mention), delete_after=3)
 
-        await (await channel.fetch_message(
-            self.register_message_id)).remove_reaction(emojize(
-                emoji), member)  # remove user reaction from message
+            await (await channel.fetch_message(
+                self.register_message_id)).remove_reaction(emojize(
+                    emoji), member)  # remove user reaction from message
 
     async def add_guest(self, channel: discord.TextChannel,
                         member: discord.Member, emoji: str,
