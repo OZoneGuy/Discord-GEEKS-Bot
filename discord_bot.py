@@ -6,11 +6,11 @@ import json
 
 from discord.ext import commands
 
-from bot_utils import write_log
+from bot_utils import get_config, write_log
 
 VERSION = "0.15.5.20 A"
 
-config = json.load(open("config.json"))
+config = json.load(open(get_config(), 'r'))
 
 # channel IDs
 DEV_CHANNEL = 385506783919079425
@@ -45,7 +45,6 @@ async def status(ctx):
     """
     A command used to check the status of the bot.
     """
-    print("test")
     await ctx.channel.send(content="Up and Running. Version: " + VERSION,
                            delete_after=3)
     await ctx.message.delete()

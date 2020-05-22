@@ -5,8 +5,7 @@ from discord.ext import commands  # commands classes
 from emoji import demojize, emojize
 
 import sql_handler  # sql interface
-
-from bot_utils import get_message_from_json
+from bot_utils import get_config, get_message_from_json
 
 
 class Welcome(commands.Cog):
@@ -26,7 +25,7 @@ class Welcome(commands.Cog):
         Loads role_message_id, register_message_id, reg_channel_id,
         role_channel_id from json file
         '''
-        with open('config.json', 'r') as j_file:
+        with open(get_config(), 'r') as j_file:
             # get json data
             j_data = json.load(j_file)
             reg_data = j_data['reg_data']
@@ -89,7 +88,7 @@ class Welcome(commands.Cog):
             self.role_message_id = reg_data['role_message_id']
             # save data to dictionary and json file
             j_data['reg_data'] = reg_data
-            json.dump(j_data, open('config.json', 'w'))
+            json.dump(j_data, open(get_config(), 'w'))
 
     # get message string from json file
 
