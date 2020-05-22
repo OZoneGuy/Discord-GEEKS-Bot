@@ -159,9 +159,6 @@ class Welcome(commands.Cog):
         await member.add_roles(role)  # give guest role
         await channel.send(content=get_message_from_json(
             "guest_message").format(member.mention), delete_after=3)
-        await (await channel.fetch_message(
-            self.register_message_id)).remove_reaction(emojize(
-                emoji), member)  # remove user reaction from message
 
     async def give_role(self, channel: discord.TextChannel,
                         member: discord.Member, emoji: str,
