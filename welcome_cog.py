@@ -223,6 +223,24 @@ class Welcome(commands.Cog):
                                "{user.mention}".format(user=self.bot.get_user(
                                    415154371924590593)), delete_after=3)
 
+    @commands.Cog.listener()
+    async def on_member_join(self, member: discord.Member):
+        """
+        Sends a message to the user as soon as the join the server.
+        """
+        if member.guild.name == "McMaster Geeks":
+            member.create_dm()
+            d_m = member.dm_channel
+            channel: discord.TextChannel = self.bot.get_channel(
+                self.reg_channel_id)
+            embed: discord.Embed = discord.Embed(
+                title="Sign up form.",
+                url="https://goo.gl/forms/phEbKvQzTi6MlIQ12")
+            d_m.send(content=get_message_from_json("welcome_dm").format(
+                channel=channel), embed=embed)
+        else:
+            return
+
 
 def setup(bot):
     bot.add_cog(Welcome(bot))
