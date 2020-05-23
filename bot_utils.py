@@ -25,7 +25,5 @@ def get_config() -> str:
     name_s = parser.parse_args(sys.argv[1:])
 
     if name_s.test:
-        print("Using test config")
         return "config_test.json"
-    print("Using prod config")
     return "config.json"
