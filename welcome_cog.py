@@ -229,7 +229,7 @@ class Welcome(commands.Cog):
         Sends a message to the user as soon as the join the server.
         """
         if member.guild.name == "McMaster Geeks":
-            member.create_dm()
+            await member.create_dm()
             d_m = member.dm_channel
             channel: discord.TextChannel = self.bot.get_channel(
                 self.reg_channel_id)
