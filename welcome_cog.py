@@ -236,7 +236,7 @@ class Welcome(commands.Cog):
             embed: discord.Embed = discord.Embed(
                 title="Sign up form.",
                 url="https://goo.gl/forms/phEbKvQzTi6MlIQ12")
-            d_m.send(content=get_message_from_json("welcome_dm").format(
+            await d_m.send(content=get_message_from_json("welcome_dm").format(
                 channel=channel), embed=embed)
         else:
             return
