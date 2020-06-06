@@ -171,13 +171,6 @@ class Welcome(commands.Cog):
         member_tags = [role.name.lower() for role in member.roles]
         check = any(tag in member_tags for tag in req_tags)
         if check:
-            await channel.send(content=get_message_from_json(
-                "role_fail").format(reg=self.bot.get_channel(
-                    self.reg_channel_id)), delete_after=3)
-            await (await channel.fetch_message(
-                self.role_message_id)).remove_reaction(emojize(
-                    emoji), member)  # remove user reaction from message
-        else:
             if role not in member.roles:
                 await member.add_roles(role)
                 await channel.send(content=get_message_from_json(
@@ -185,6 +178,13 @@ class Welcome(commands.Cog):
             else:
                 await channel.send(content=get_message_from_json(
                     "role_exist"), delte_after=3)
+        else:
+            await channel.send(content=get_message_from_json(
+                "role_fail").format(reg=self.bot.get_channel(
+                    self.reg_channel_id)), delete_after=3)
+            await (await channel.fetch_message(
+                self.role_message_id)).remove_reaction(emojize(
+                    emoji), member)  # remove user reaction from message
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self,
