@@ -7,10 +7,11 @@ _cursor = _db.cursor()
 
 _cursor.execute("CREATE TABLE IF NOT EXISTS jokes (_id INTEGER PRIMARY KEY AUTOINCREMENT, post_id TEXT, title TEXT, body TEXT, author TEXT)")
 
-#TODO: Add registered field
+# TODO: Add registered field
 _cursor.execute("CREATE TABLE IF NOT EXISTS form_responses (timeStamp TEXT, discord_name TEXT, name_and_program TEXT, alumni INTEGER, interests TEXT, email TEXT, PRIMARY KEY(email, discord_name))")
 
 _cursor.execute("CREATE TABLE IF NOT EXISTS user_lvl_n_msgs (_user_id INTEGER PRIMARY KEY, message_cnt INTEGER, level INTEGER)")
+
 
 def insert_joke(post_id, title, body, author):
     _cursor.execute('SELECT * FROM jokes WHERE post_id = "' + str(post_id) + '"')
@@ -44,6 +45,7 @@ def is_registered(user_name, user_disc):
     else:
         return False
 
+
 def add_message(user_id):
     _cursor.execute('SELECT message_cnt FROM user_lvl_n_msgs WHERE _user_id = {}'.format(user_id))
     data = _cursor.fetchall()
@@ -57,7 +59,8 @@ def add_message(user_id):
         _cursor.execute('INSERT INTO user_lvl_n_msgs (_user_id, message_cnt, level) VALUES({}, {}, {})'.format(user_id, 1, 1))
         _db.commit()
 
-#checks if user is eady for level up
+
+# checks if user is eady for level up
 def is_lvl_up(user_id):
     _cursor.execute('SELECT message_cnt, level FROM user_lvl_n_msgs WHERE _user_id = {}'.format(user_id))
     data = _cursor.fetchall()
@@ -68,9 +71,11 @@ def is_lvl_up(user_id):
         return True
     return False
 
+
 def messages_req_for_lvl(cur_lvl):
     return 2**(cur_lvl+1)
     pass
+
 
 def get_messages(user_id):
     _cursor.execute('SELECT message_cnt FROM user_lvl_n_msgs WHERE _user_id = {}'.format(user_id))
@@ -83,7 +88,8 @@ def get_level(user_id):
     data = _cursor.fetchone()
     return data[0]
 
-#adds 1 to level
+
+# adds 1 to level
 def lvl_up(user_id):
     _cursor.execute('SELECT level FROM user_lvl_n_msgs WHERE _user_id = {}'.format(user_id))
     lvl = _cursor.fetchone()
