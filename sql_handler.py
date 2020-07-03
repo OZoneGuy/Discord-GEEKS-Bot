@@ -1,7 +1,7 @@
 import sqlite3
 import sheets_interface
 
-_db = sqlite3.connect('mydb.db')
+_db = sqlite3.connect('data/mydb.db')
 
 _cursor = _db.cursor()
 

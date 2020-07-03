@@ -3,16 +3,17 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 import json
 import sql_handler
+from bot_utils import get_config
 
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
-config = json.load(open('config.json'))
+config = json.load(open(get_config()))
 
 sheet_ID = config['sheet_id']
 sheet_range = 'A2:F'
 
 
 def main():
-    store = file.Storage('token.json')
+    store = file.Storage('data/token.json')
     creds = store.get()
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('google-sheets-credentials.json', SCOPES)

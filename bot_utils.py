@@ -5,13 +5,13 @@ from datetime import datetime
 
 
 def get_message_from_json(data: str) -> str:
-    messages: dict = json.load(open('messages.json'))
+    messages: dict = json.load(open('data/messages.json'))
     return messages[data]
 
 
 def write_log(text: str) -> None:
     text = str(datetime.now()) + " - " + text + "\n"
-    f = open("GEEK.log", "a+")
+    f = open("logs/GEEK.log", "a+")
     f.write(text)
     f.close()
 
@@ -25,5 +25,5 @@ def get_config() -> str:
     name_s = parser.parse_args(sys.argv[1:])
 
     if name_s.test:
-        return "config_test.json"
-    return "config.json"
+        return "config/config_test.json"
+    return "config/config.json"
