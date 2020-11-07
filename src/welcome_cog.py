@@ -11,6 +11,7 @@ from bot_utils import get_config, get_message_from_json
 class Welcome(commands.Cog):
 
     def __init__(self, bot: commands.Bot):
+        sql_handler.update()
         self.bot = bot
         self._last_member = None
 
