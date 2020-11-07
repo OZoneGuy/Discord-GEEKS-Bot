@@ -1,18 +1,13 @@
 # docker file for discord GEEKS Bot
 
-FROM archlinux/base
+FROM python:3
 
-RUN pacman -Syyuu --noconfirm # update everything
-RUN pacman -Sy --noconfirm python python-pip # install python, no need for venv
-RUN mkdir /program
+MAINTAINER alkersh.omar@protonmail.com
 
-ENV WORKDIR /program
-WORKDIR $WORKDIR
-ADD . /program
+WORKDIR /usr/src/app
 
-RUN pip install -r requirements.txt
-
-# maybe this will work?
-RUN python sheets_interface.py > sheets_url
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
 # ENTRYPIONT sh discord_bot.sh
+CMD sh discord_bot.sh
