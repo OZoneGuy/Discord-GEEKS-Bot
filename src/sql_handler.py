@@ -13,17 +13,6 @@ _cursor.execute("CREATE TABLE IF NOT EXISTS form_responses (timeStamp TEXT, disc
 _cursor.execute("CREATE TABLE IF NOT EXISTS user_lvl_n_msgs (_user_id INTEGER PRIMARY KEY, message_cnt INTEGER, level INTEGER)")
 
 
-def insert_joke(post_id, title, body, author):
-    _cursor.execute('SELECT * FROM jokes WHERE post_id = "' + str(post_id) + '"')
-    v = _cursor.fetchall()
-    if len(v) == 0:
-        _cursor.execute('INSERT INTO jokes(post_id, title, body, author) VALUES(?,?,?,?)', (str(post_id), str(title), str(body), str(author)))
-        _db.commit()
-        print('inserted joke')
-        return
-    print("joke already exists")
-
-
 def insert_form_response(time, user_name, name_prog, alumni, interests, email):
     search = 'SELECT * FROM form_responses WHERE email = "{}" OR discord_name = "{}"'.format(email, user_name)
     _cursor.execute(search)
