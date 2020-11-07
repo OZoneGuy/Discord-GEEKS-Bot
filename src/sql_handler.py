@@ -5,12 +5,10 @@ _db = sqlite3.connect('data/mydb.db')
 
 _cursor = _db.cursor()
 
-_cursor.execute("CREATE TABLE IF NOT EXISTS jokes (_id INTEGER PRIMARY KEY AUTOINCREMENT, post_id TEXT, title TEXT, body TEXT, author TEXT)")
-
-# TODO: Add registered field
-_cursor.execute("CREATE TABLE IF NOT EXISTS form_responses (timeStamp TEXT, discord_name TEXT, name_and_program TEXT, alumni INTEGER, interests TEXT, email TEXT, PRIMARY KEY(email, discord_name))")
-
-_cursor.execute("CREATE TABLE IF NOT EXISTS user_lvl_n_msgs (_user_id INTEGER PRIMARY KEY, message_cnt INTEGER, level INTEGER)")
+_cursor.execute("CREATE TABLE IF NOT EXISTS form_responses (timeStamp TEXT, "
+                "discord_name TEXT, name_and_program TEXT, alumni INTEGER, "
+                "interests TEXT, email TEXT, "
+                "PRIMARY KEY(email, discord_name))")
 
 
 def insert_form_response(time, user_name, name_prog, alumni, interests, email):
@@ -27,8 +25,10 @@ def insert_form_response(time, user_name, name_prog, alumni, interests, email):
 
 
 def is_registered(user_name, user_disc):
-    sheets_interface.main()
-    _cursor.execute('SELECT * FROM form_responses WHERE discord_name LIKE \'{}%\''.format(user_name))
+    update()
+    _cursor.execute("SELECT * FROM form_responses "
+                    "WHERE discord_name LIKE '{}%' "
+                    "OR discord_name LIKE '%{}'".format(user_name, user_disc))
     if len(_cursor.fetchall()) > 0:
         return True
     else:
