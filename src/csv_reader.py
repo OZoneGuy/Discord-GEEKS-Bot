@@ -3,7 +3,7 @@ from json import load
 from urllib.request import urlopen
 from os import remove
 
-from sql_handler import insert_form_response
+import sql_handler
 from bot_utils import get_config
 
 
@@ -23,9 +23,9 @@ def import_form():
         csv_file = csv.reader(f)
         for row in csv_file:
             try:
-                insert_form_response(row[0], row[1], row[2],
-                                     True if row[3] == 'Yes'
-                                     else False, row[4], row[5])
+                sql_handler.insert_form_response(row[0], row[1], row[2],
+                                                 True if row[3] == 'Yes'
+                                                 else False, row[4], row[5])
             except Exception():
                 print('error')
 
