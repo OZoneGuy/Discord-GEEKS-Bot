@@ -1,5 +1,5 @@
 import sqlite3
-import sheets_interface
+from csv_reader import import_form
 
 _db = sqlite3.connect('data/mydb.db')
 
@@ -21,7 +21,8 @@ def insert_form_response(time, user_name, name_prog, alumni, interests, email):
         sql = 'INSERT INTO form_responses (timeStamp, discord_name, name_and_program, alumni, interests, email) VALUES("{}", "{}", "{}", {}, "{}", "{}")'.format(time, user_name, name_prog.replace('"', ''), alum, interests, email)
         _cursor.execute(sql)
         _db.commit()
-        return
+        return True
+    return False
 
 
 def is_registered(user_name, user_disc):
@@ -36,4 +37,4 @@ def is_registered(user_name, user_disc):
 
 
 def update():
-    sheets_interface.main()
+    import_form()
