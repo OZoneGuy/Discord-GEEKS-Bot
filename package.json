@@ -1,0 +1,23 @@
+{
+  "name": "discord-geeks-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Main.ts",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OZoneGuy/Discord-GEEKS-Bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OZoneGuy/Discord-GEEKS-Bot/issues"
+  },
+  "homepage": "https://github.com/OZoneGuy/Discord-GEEKS-Bot#readme",
+  "dependencies": {
+    "discord.js": "^13.1.0",
+    "discordx": "^5.8.1",
+    "reflect-metadata": "^0.1.13"
+  }
+}
