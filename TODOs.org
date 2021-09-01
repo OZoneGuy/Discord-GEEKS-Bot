@@ -1,0 +1,17 @@
+* TODO Setup typescript project [0/1]
+** TODO Setup some useful start commands
+* TODO Add discord.js as a dependency
+* TODO Write boilerplate for discord bot
+* TODO Implement: [0/5]
+** TODO Verify email [0/3]
+*** TODO Listen to messages sent in DM
+*** TODO Verify that sent message matches the following format
+    ~-register <email> [server_name]~
+
+    The email used to register for the (optional) server. The email verification depends on which server the user is in/chose to register in.
+** TODO Listen to users adding reactions to specific messages
+** TODO Allow privileged users to define messages to listen to
+   Privileged users are users who have a specific role, depending on which server it is.
+** TODO Give users roles on successful registration
+*** TODO Allow privileged users to define membership role and guest role
+*** TODO Allow users to get a "guest" tag
