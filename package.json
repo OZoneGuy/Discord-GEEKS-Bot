@@ -22,6 +22,10 @@
   "dependencies": {
     "discord.js": "^13.1.0",
     "discordx": "^5.8.1",
+    "mongoose": "^6.0.4",
     "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.11.97"
   }
 }
