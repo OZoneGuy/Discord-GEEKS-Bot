@@ -250,3 +250,5 @@ dist
 
 ## typescript
 build/
+
+secret_*
