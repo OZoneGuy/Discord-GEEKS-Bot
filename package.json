@@ -2,8 +2,12 @@
   "name": "discord-geeks-bot",
   "version": "1.0.0",
   "description": "",
-  "main": "Main.ts",
-  "scripts": {},
+  "main": "src/Main.ts",
+    "scripts": {
+        "run": "ts-node src/Main",
+        "build": "tsc",
+        "clean": "rm -rf build/src/*"
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/OZoneGuy/Discord-GEEKS-Bot.git"
