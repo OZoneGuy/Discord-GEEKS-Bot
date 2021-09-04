@@ -1,8 +1,22 @@
-* TODO Setup typescript project [0/1]
-** TODO Setup some useful start commands
-* TODO Add discord.js as a dependency
-* TODO Write boilerplate for discord bot
-* TODO Implement: [0/5]
+* DONE Setup typescript project [1/1]
+  CLOSED: [2021-09-02 Thu 00:15]
+** DONE Setup some useful start commands
+   CLOSED: [2021-09-02 Thu 00:15]
+* DONE Add discord.js as a dependency
+  CLOSED: [2021-09-02 Thu 00:14]
+* DONE Write boilerplate for discord bot
+  CLOSED: [2021-09-02 Thu 00:15]
+* TODO Implement: [1/9]
+** DONE Come up with database schema
+   CLOSED: [2021-09-02 Thu 01:38]
+*** Tables
+    - Servers/Guilds
+      - id:         primary key
+      - guildId:    unique String
+      - Guild Name: String
+      - Role:       unique int
+      - email tail: string
+      - messageId:  unique int
 ** TODO Verify email [0/3]
 *** TODO Listen to messages sent in DM
 *** TODO Verify that sent message matches the following format
@@ -10,8 +24,12 @@
 
     The email used to register for the (optional) server. The email verification depends on which server the user is in/chose to register in.
 ** TODO Listen to users adding reactions to specific messages
+** TODO Allow privileged users to register server
 ** TODO Allow privileged users to define messages to listen to
    Privileged users are users who have a specific role, depending on which server it is.
+** TODO Allow privileged users to set membership role
+** TODO Allow privileged users to set guest role
+** TODO Allow privileged users to set email tail
 ** TODO Give users roles on successful registration
 *** TODO Allow privileged users to define membership role and guest role
 *** TODO Allow users to get a "guest" tag
