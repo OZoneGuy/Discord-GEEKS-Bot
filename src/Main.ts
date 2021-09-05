@@ -3,6 +3,7 @@ import { Client } from "discordx";
 import { Intents } from "discord.js";
 
 import { test_token as token } from "../config/secret_config.json";
+import { connect_to_db } from "./utils/database/db";
 
 async function start() {
     const client: Client = new Client({
@@ -29,6 +30,9 @@ async function start() {
         client.executeInteraction(interaction);
     });
 
+    const db_conn = await connect_to_db()
+    if (!db_conn)
+        return;
     await client.login(token);
 }
 
