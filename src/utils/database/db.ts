@@ -1,4 +1,4 @@
-import { connect, model, Schema } from "mongoose";
+import { connect, connection, model, Schema } from "mongoose";
 import { logger } from '../logger';
 
 const host: string = process.env["MON_HOST"] || "127.0.0.1";
@@ -39,6 +39,18 @@ export async function connect_to_db(): Promise<null | typeof import("mongoose")>
             logger.error(`Received error: ${err}`)
             return null
         })
+}
+
+/**
+ * Closes Database Connection
+ */
+export async function close_db_connections() {
+    logger.info("Closing MongoDB connection...")
+    connection.close().then(() => {
+        logger.info("Closed MongoDB connection.")
+    }).catch((err) => {
+        logger.error(`Failed to close MongoDB connection with error: ${err}`)
+    })
 }
 
 /**
