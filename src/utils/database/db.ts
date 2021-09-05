@@ -165,6 +165,7 @@ export async function get_guest_role(guild_id: string): Promise<number | undefin
  */
 export async function set_email_tail(guild_id: string, email_tail: string): Promise<boolean | null> {
 
+    email_tail = email_tail.replace('.', '\.')
     let result = await GuildModel.findOneAndUpdate({guildId: guild_id}, {email_tail: email_tail});
 
     if (result) {
