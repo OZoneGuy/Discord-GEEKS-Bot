@@ -1,17 +1,14 @@
 import { CommandInteraction, Guild, Permissions } from "discord.js";
 import { Discord, Guard, Slash } from "discordx";
 import { isAdmin } from "../gaurds/admin";
+import { inGuild } from "../gaurds/inGuild";
 import { add_guild } from '../utils/database/db'
 
 @Discord()
-@Guard(isAdmin)
+@Guard(isAdmin, inGuild)
 abstract class AppDiscord {
     @Slash("register_server")
     private register_server(interaction: CommandInteraction): void {
-        if (!interaction.inGuild) {
-            interaction.reply("Please use this command from the server you want to register")
-            return
-        }
 
         const guild: Guild = interaction.guild!
         add_guild(guild.id, guild.name).then((res) => {
