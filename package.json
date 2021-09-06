@@ -4,7 +4,7 @@
     "description": "",
     "main": "src/Main.ts",
     "scripts": {
-        "run": "ts-node src/Main",
+        "start": "ts-node src/Main",
         "build": "tsc",
         "clean": "rm -rf build/src/*"
     },
