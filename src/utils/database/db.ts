@@ -9,7 +9,7 @@ const username: string = process.env["MON_USERNAME"] || "kevin";
 const password: string = process.env["MON_PASSWORD"] || "hart";
 
 export interface GuildInfo {
-    guildId: string,
+    _id: string,
     guildName: string,
     member_role?: string,
     guest_role?: number,
@@ -18,7 +18,7 @@ export interface GuildInfo {
 }
 
 const guild_schema = new Schema<GuildInfo>({
-    guildId: { type: String, required: true },
+    _id: { type: String, alias: 'guildId' },
     guildName: { type: String, required: true },
     member_role: String,
     guest_role: Number,
@@ -31,9 +31,8 @@ const GuildModel = model<GuildInfo>('GuildInfo', guild_schema)
 /**
  * Connects to the MongoDB database
  */
-export async function connect_to_db(): Promise<null | typeof import("mongoose")>{
-    return connect(`mongodb://${host}:${port}`,
-        { user: username, pass: password, dbName: db })
+export async function connect_to_db(): Promise<null | typeof import("mongoose")> {
+    return connect(`mongodb://${username}:${password}@${host}:${port}`)
         .catch((err) => {
             logger.error(`Failed to connect to ${db} at ${host}:${port}`)
             logger.error(`Received error: ${err}`)
@@ -88,16 +87,20 @@ export async function add_guild(id: string, name: string): Promise<boolean> {
  */
 export async function set_member_role(guild_id: string, role: string): Promise<boolean | null> {
 
-    let result = await GuildModel.findOneAndUpdate({ guildId: guild_id }, { member_role: role },
-                                                   {new: true}).exec();
-    if (result) {
-        if (result.member_role == role) {
-            logger.info(`Successfully set member role (${role}) for guild ${result.guildName}`)
-            return true
-        } else {
-            logger.error(`Failed to set member role to ${role} for ${result.guildName}`)
-            return false
-        }
+    let doc = await GuildModel.findById(guild_id).exec();
+
+
+    if (doc) {
+        doc.member_role = role
+        return doc.save().then((new_doc) => {
+            if (new_doc.member_role == role) {
+                logger.info(`Successfully set member role (${role}) for guild ${new_doc.guildName}`)
+                return true
+            } else {
+                logger.error(`Failed to set member role to ${role} for ${new_doc.guildName}`)
+                return false
+            }
+        })
     } else {
         logger.error(`Couldn't find guild with id ${guild_id}`)
         return null
@@ -112,8 +115,8 @@ export async function set_member_role(guild_id: string, role: string): Promise<b
  *
  * @returns null if it could not find the guild object, undefined if `member_role` is not defined, and the `member_role` if it is defined
  */
-export async function get_member_role(guild_id: string): Promise<string | null | undefined>{
-    let result = await GuildModel.findOne({guildId: guild_id}).exec();
+export async function get_member_role(guild_id: string): Promise<string | null | undefined> {
+    let result = await GuildModel.findById(guild_id).exec();
     return result && result.member_role
 }
 
@@ -127,16 +130,19 @@ export async function get_member_role(guild_id: string): Promise<string | null |
  */
 export async function set_guest_role(guild_id: string, role: number): Promise<boolean | null> {
 
-    let result = await GuildModel.findOneAndUpdate({ guildId: guild_id }, { guest_role: role }).exec();
+    let doc = await GuildModel.findById(guild_id).exec();
 
-    if (result) {
-        if (result.guest_role == role) {
-            logger.info(`Successfully set guest role (${role}) for guild ${result.guildName}`)
-            return true
-        } else {
-            logger.error(`Failed to set guest role to ${role} for ${result.guildName}`)
-            return false
-        }
+    if (doc) {
+        doc.guest_role = role
+        return doc.save().then((new_doc) => {
+            if (new_doc.guest_role == role) {
+                logger.info(`Successfully set guest role (${role}) for guild ${new_doc.guildName}`)
+                return true
+            } else {
+                logger.error(`Failed to set guest role to ${role} for ${new_doc.guildName}`)
+                return false
+            }
+        })
     } else {
         logger.error(`Couldn't find guild with id ${guild_id}`)
         return null
@@ -166,16 +172,19 @@ export async function get_guest_role(guild_id: string): Promise<number | undefin
 export async function set_email_tail(guild_id: string, email_tail: string): Promise<boolean | null> {
 
     email_tail = email_tail.replace('.', '\.')
-    let result = await GuildModel.findOneAndUpdate({guildId: guild_id}, {email_tail: email_tail});
+    let doc = await GuildModel.findById(guild_id).exec();
 
-    if (result) {
-        if (result.email_tail == email_tail) {
-            logger.info(`Successfully set email (${email_tail}) for guild ${result.guildName}`)
-            return true
-        } else {
-            logger.error(`Failed to set email to ${email_tail} for ${result.guildName}`)
-            return false
-        }
+    if (doc) {
+        doc.email_tail = email_tail
+        return doc.save().then((new_doc) => {
+            if (new_doc.email_tail == email_tail) {
+                logger.info(`Successfully set email (${email_tail}) for guild ${new_doc.guildName}`)
+                return true
+            } else {
+                logger.error(`Failed to set email to ${email_tail} for ${new_doc.guildName}`)
+                return false
+            }
+        })
     } else {
         logger.error(`Couldn't find guild with id ${guild_id}`)
         return null
@@ -190,7 +199,7 @@ export async function set_email_tail(guild_id: string, email_tail: string): Prom
  * @returns null if it could not find the guild object, undefined if `email_tail` is not defined, and the `email_tail` if it is defined
  */
 export async function get_email_tail(guild_id: string): Promise<string | undefined | null> {
-    let result = await GuildModel.findOne({guildId: guild_id}).exec();
+    let result = await GuildModel.findById(guild_id).exec();
     return result && result.email_tail
 }
 
@@ -203,16 +212,19 @@ export async function get_email_tail(guild_id: string): Promise<string | undefin
  * @returns true if successful, false if not successful, and null if it was unable to find the guild object
  */
 export async function set_message_id(guild_id: string, message_id: number): Promise<boolean | null> {
-    let result = await GuildModel.findOneAndUpdate({guildId: guild_id, message_id: message_id});
+    let doc = await GuildModel.findById(guild_id).exec();
 
-    if (result) {
-        if(result.message_id == message_id) {
-            logger.info(`Successfully set message (${message_id}) for guild ${result.guildName}`)
-            return true
-        } else {
-            logger.error(`Failed to set message to ${message_id} for ${result.guildName}`)
-            return false
-        }
+    if (doc) {
+        doc.message_id = message_id
+        return doc.save().then((new_doc) => {
+            if (new_doc.message_id == message_id) {
+                logger.info(`Successfully set message (${message_id}) for guild ${new_doc.guildName}`)
+                return true
+            } else {
+                logger.error(`Failed to set message to ${message_id} for ${new_doc.guildName}`)
+                return false
+            }
+        })
     } else {
         logger.error(`Couldn't find guild with id ${guild_id}`)
         return null
@@ -227,6 +239,6 @@ export async function set_message_id(guild_id: string, message_id: number): Prom
  * @returns null if it could not find the guild object, undefined if `message_id` is not defined, and the `message_id` if it is defined
  */
 export async function get_message_id(guild_id: string): Promise<number | undefined | null> {
-    let result = await GuildModel.findOne({ guildId: guild_id }).exec();
+    let result = await GuildModel.findById(guild_id).exec();
     return result && result.message_id
 }
