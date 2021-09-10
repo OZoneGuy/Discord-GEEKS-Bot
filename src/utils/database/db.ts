@@ -16,6 +16,11 @@ export interface GuildInfo {
     email_tail?: string,
     message_id?: number
 }
+export interface MemberInfo {
+    _id: string,
+    email_ver: boolean,
+    reaction: boolean
+}
 
 const guild_schema = new Schema<GuildInfo>({
     _id: { type: String, alias: 'guildId' },
@@ -26,7 +31,14 @@ const guild_schema = new Schema<GuildInfo>({
     message_id: Number
 })
 
+const member_schema = new Schema<MemberInfo>({
+    _id: { type: String, alias: 'userId' },
+    email_ver: { type: Boolean, required: true },
+    reaction: { type: Boolean, required: true }
+})
+
 const GuildModel = model<GuildInfo>('GuildInfo', guild_schema)
+const MemberModel = model<MemberInfo>('MemberInfo', member_schema)
 
 /**
  * Connects to the MongoDB database
@@ -241,4 +253,87 @@ export async function set_message_id(guild_id: string, message_id: number): Prom
 export async function get_message_id(guild_id: string): Promise<number | undefined | null> {
     let result = await GuildModel.findById(guild_id).exec();
     return result && result.message_id
+}
+
+/**
+ * @description Records that the user reacted to the rules message. Sets
+ *
+ * @param user_id: The id of the user who reacted to the message
+ *
+ * @return null if failed to save the reaction, `true` if they registered their email, and `false` otherwise
+ */
+export async function add_reaction(user_id: string): Promise<boolean | null> {
+    let result = await MemberModel.findById(user_id).exec()
+
+    if (result) {
+        result.reaction = true
+        return result.save()
+            .then((new_mem) => {
+                if (new_mem.reaction)
+                    return new_mem.email_ver
+                else {
+                    logger.error(`Failed update reaction for ${user_id}`)
+                    return null
+                }
+            })
+            .catch((err) => {
+                logger.error(`Failed to register user reaction: ${err}`)
+                return null
+            })
+    } else {
+        const new_member = new MemberModel({
+            _id: user_id,
+            reaction: true,
+            email_ver: false
+        })
+
+        return new_member.save()
+            .then((_) => { return false })
+            .catch((err) => {
+                logger.error(`Failed to register user reaction: ${err}`)
+                return null
+            })
+    }
+}
+
+/**
+ * @description Record that an email has been registered for the given user
+ *
+ * @param user_id: The id of the user who registered their email
+ *
+ * @return Null if it failed to record email, undefined if the user didn't
+ */
+export async function reg_email(user_id: string): Promise<boolean | null> {
+    const user = await MemberModel.findById(user_id).exec();
+
+    if (user) {
+        user.email_ver = true
+        return user.save()
+            .then((new_doc) => {
+                if (new_doc.email_ver) {
+                    return user.reaction
+                } else {
+                    logger.error(`Failed to update email_ver for ${user_id}`)
+                    return null
+                }
+            })
+            .catch((err) => {
+                logger.error(`Error when recording registered email for ${user_id}: ${err}`)
+                return null
+            })
+    } else {
+        const new_member = new MemberModel({
+            userId: user_id,
+            email_ver: true,
+            reaction: false
+        })
+
+        return new_member.save()
+            .then((_) => { return false })
+            .catch((err) => {
+                logger.error(`Failed to register user reaction: ${err}`)
+                return null
+            })
+    }
+
 }
