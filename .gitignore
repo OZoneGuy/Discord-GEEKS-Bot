@@ -252,3 +252,4 @@ dist
 build/
 
 secret_*
+*.env
