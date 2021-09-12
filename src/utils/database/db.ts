@@ -18,7 +18,7 @@ export interface GuildInfo {
 }
 export interface MemberInfo {
     _id: string,
-    email_ver: boolean,
+    email_ver?: boolean,
     reaction: boolean
 }
 
@@ -33,7 +33,7 @@ const guild_schema = new Schema<GuildInfo>({
 
 const member_schema = new Schema<MemberInfo>({
     _id: { type: String, alias: 'userId' },
-    email_ver: { type: Boolean, required: true },
+    email_ver: { type: Boolean, default: undefined },
     reaction: { type: Boolean, required: true }
 })
 
@@ -260,9 +260,9 @@ export async function get_message_id(guild_id: string): Promise<string | undefin
  *
  * @param user_id: The id of the user who reacted to the message
  *
- * @return null if failed to save the reaction, `true` if they registered their email, and `false` otherwise
+ * @return null if failed to save the reaction, `true` if they registered their email, `false` otherwise, and `undefined` if they haven't requested anything yet
  */
-export async function add_reaction(user_id: string): Promise<boolean | null> {
+export async function add_reaction(user_id: string): Promise<boolean | null | undefined> {
     let result = await MemberModel.findById(user_id).exec()
 
     if (result) {
@@ -283,12 +283,11 @@ export async function add_reaction(user_id: string): Promise<boolean | null> {
     } else {
         const new_member = new MemberModel({
             _id: user_id,
-            reaction: true,
-            email_ver: false
+            reaction: true
         })
 
         return new_member.save()
-            .then((_) => { return false })
+            .then((res) => { return res.email_ver})
             .catch((err) => {
                 logger.error(`Failed to register user reaction: ${err}`)
                 return null
@@ -301,9 +300,9 @@ export async function add_reaction(user_id: string): Promise<boolean | null> {
  *
  * @param user_id: The id of the user who registered their email
  *
- * @return Null if it failed to record email, undefined if the user didn't
+ * @return Null if it failed to record email, false if the user didn't give reaction, and true if the user reacted
  */
-export async function reg_email(user_id: string): Promise<boolean | null> {
+export async function reg_email(user_id: string): Promise<boolean | null | undefined> {
     const user = await MemberModel.findById(user_id).exec();
 
     if (user) {
@@ -335,5 +334,46 @@ export async function reg_email(user_id: string): Promise<boolean | null> {
                 return null
             })
     }
+}
 
+/**
+ * @description Record that no email has been registered for the given user
+ *
+ * @param user_id: The id of the user who didn't register their email
+ *
+ * @return Null if it failed to record email, false if the user didn't give reaction, and true if the user reacted
+ */
+export async function reg_guest(user_id: string): Promise<boolean | null> {
+
+    const user = await MemberModel.findById(user_id).exec();
+
+    if (user) {
+        user.email_ver = false
+        return user.save()
+            .then((new_doc) => {
+                if (new_doc.email_ver) {
+                    return user.reaction
+                } else {
+                    logger.error(`Failed to update email_ver for ${user_id}`)
+                    return null
+                }
+            })
+            .catch((err) => {
+                logger.error(`Error when recording registered email for ${user_id}: ${err}`)
+                return null
+            })
+    } else {
+        const new_member = new MemberModel({
+            userId: user_id,
+            email_ver: false,
+            reaction: false
+        })
+
+        return new_member.save()
+            .then((_) => { return false })
+            .catch((err) => {
+                logger.error(`Failed to register user reaction: ${err}`)
+                return null
+            })
+    }
 }
