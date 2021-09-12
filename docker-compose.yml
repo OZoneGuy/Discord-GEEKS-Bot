@@ -1,0 +1,25 @@
+services:
+  mongoDB:
+    image: mongo
+    volumes:
+      - /data/db
+
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: ${MON_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${MON_PASSWORD}
+
+  discord_bot:
+    image: node
+    user: "node"
+    working_dir: /home/node/app
+    volumes:
+      - ${PWD}/node-start.sh:/home/node/app/node-start.sh
+      - ${PWD}/build:/home/node/app
+      - ${PWD}/package.json:/home/node/app/package.json
+      - ${PWD}/package-lock.json:/home/node/app/package-lock.json
+      - ${PWD}/logs:/home/node/app/logs
+    env_file:
+      - .env
+    environment:
+      - HOST="mongoDB"
+    command: "npm start"
