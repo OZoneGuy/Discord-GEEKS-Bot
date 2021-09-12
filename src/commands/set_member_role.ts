@@ -7,8 +7,10 @@ import { set_member_role } from "../utils/database/db";
 @Guard(isAdmin)
 abstract class AddDiscord {
     @Slash("set_members_role")
-    private set_members_role(@SlashOption("Role", { required: true }) role: Role,
-                             interaction: CommandInteraction) {
+    private set_members_role(
+        @SlashOption("Role", { required: true }) role: Role,
+        interaction: CommandInteraction) {
+
         const guild_id = interaction.guild!.id
         set_member_role(guild_id, role.id).then((res) => {
             switch (typeof res) {
