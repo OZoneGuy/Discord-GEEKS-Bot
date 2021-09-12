@@ -12,9 +12,9 @@ export interface GuildInfo {
     _id: string,
     guildName: string,
     member_role?: string,
-    guest_role?: number,
+    guest_role?: string,
     email_tail?: string,
-    message_id?: number
+    message_id?: string
 }
 export interface MemberInfo {
     _id: string,
@@ -26,9 +26,9 @@ const guild_schema = new Schema<GuildInfo>({
     _id: { type: String, alias: 'guildId' },
     guildName: { type: String, required: true },
     member_role: String,
-    guest_role: Number,
+    guest_role: String,
     email_tail: String,
-    message_id: Number
+    message_id: String
 })
 
 const member_schema = new Schema<MemberInfo>({
@@ -140,7 +140,7 @@ export async function get_member_role(guild_id: string): Promise<string | null |
  *
  * @returns true if successful, false if not successful, and null if it was unable to find the guild object
  */
-export async function set_guest_role(guild_id: string, role: number): Promise<boolean | null> {
+export async function set_guest_role(guild_id: string, role: string): Promise<boolean | null> {
 
     let doc = await GuildModel.findById(guild_id).exec();
 
@@ -168,7 +168,7 @@ export async function set_guest_role(guild_id: string, role: number): Promise<bo
  *
  * @returns null if it could not find the guild object, undefined if `guest_role` is not defined, and the `guest_role` if it is defined
  */
-export async function get_guest_role(guild_id: string): Promise<number | undefined | null> {
+export async function get_guest_role(guild_id: string): Promise<string | undefined | null> {
     let result = await GuildModel.findOne({ guildId: guild_id }).exec();
     return result && result.guest_role
 }
@@ -221,9 +221,9 @@ export async function get_email_tail(guild_id: string): Promise<string | undefin
  * @param guild_id: the id of the guild to update
  * @param message_id: the message id
  *
- * @returns true if successful, false if not successful, and null if it was unable to find the guild object
+ * @returns `true` if successful, `false` if not successful, and `null` if it was unable to find the guild object
  */
-export async function set_message_id(guild_id: string, message_id: number): Promise<boolean | null> {
+export async function set_message_id(guild_id: string, message_id: string): Promise<boolean | null> {
     let doc = await GuildModel.findById(guild_id).exec();
 
     if (doc) {
@@ -250,7 +250,7 @@ export async function set_message_id(guild_id: string, message_id: number): Prom
  *
  * @returns null if it could not find the guild object, undefined if `message_id` is not defined, and the `message_id` if it is defined
  */
-export async function get_message_id(guild_id: string): Promise<number | undefined | null> {
+export async function get_message_id(guild_id: string): Promise<string | undefined | null> {
     let result = await GuildModel.findById(guild_id).exec();
     return result && result.message_id
 }
