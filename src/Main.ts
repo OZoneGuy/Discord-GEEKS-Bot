@@ -18,7 +18,9 @@ async function start() {
             `${__dirname}/events/*.{ts,js}`,
             `${__dirname}/commands/*.{ts,js}`,
             `${__dirname}/guards/*.{ts,js}`,
-        ]
+        ],
+        // TODO: Use environment variables to set these
+        botGuilds: ["761010798180827166", "501942173974134784"]
     });
 
     client.once("ready", async () => {
