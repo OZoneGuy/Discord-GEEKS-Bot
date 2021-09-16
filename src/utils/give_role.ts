@@ -24,7 +24,12 @@ export async function give_role_command(
             if (role) {
                 const memberManager = new GuildMemberManager(guild)
                 const member = await memberManager.fetch(interaction.user)
-                member.roles.add(role)
+                if (member.roles.cache.has(role.id)) {
+                    interaction.reply(`You already have the **${role.name}** role in **${guild.name}**`)
+                } else {
+                    member.roles.add(role)
+                    interaction.reply(`Gave you the **${role.name}** in **${guild.name}**`)
+                }
                 interaction.reply("Enjoy your stay!")
             } else {
                 interaction.reply("Couldn't find the role. Please contact the admins.")
