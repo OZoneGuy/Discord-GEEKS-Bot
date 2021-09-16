@@ -9,10 +9,11 @@ async function start() {
     const client: Client = new Client({
         intents: [
             Intents.FLAGS.GUILDS,
-            Intents.FLAGS.DIRECT_MESSAGES,
             Intents.FLAGS.GUILD_MESSAGES,
-            Intents.FLAGS.DIRECT_MESSAGE_REACTIONS
+            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+            Intents.FLAGS.DIRECT_MESSAGES,
         ],
+        partials: ["REACTION", "MESSAGE", "CHANNEL"],
         requiredByDefault: true,
         classes: [
             `${__dirname}/events/*.{ts,js}`,
