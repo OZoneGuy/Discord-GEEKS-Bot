@@ -61,7 +61,7 @@ export async function give_role_message(
 
             switch (role_id) {
                 case null:
-                    user.send("The admins didn't register the server, please contact them.")
+                    user.send(`The admins didn't register the ${guild.name} server, please contact them.`)
                     break;
                 case undefined:
                     user.send("The didn't setup a guest role, please contact them.")
@@ -72,7 +72,12 @@ export async function give_role_message(
                     if (role) {
                         const memManager = new GuildMemberManager(guild)
                         const member = await memManager.fetch(user.id)
-                        member.roles.add(role)
+                        if (member.roles.cache.has(role.id)) {
+                            member.send(`You already have the **${role.name}** role in **${guild.name}**`)
+                        } else {
+                            member.roles.add(role)
+                            member.send(`Gave you the **${role.name}** in **${guild.name}**`)
+                        }
                     } else {
                         logger.error(`Couldn't find ${role_id} role in ${guild.name} for message ${msg_reaction.message.id}`)
                     }
