@@ -1,0 +1,50 @@
+* DONE Setup typescript project [1/1]
+  CLOSED: [2021-09-02 Thu 00:15]
+** DONE Setup some useful start commands
+   CLOSED: [2021-09-02 Thu 00:15]
+* DONE Add discord.js as a dependency
+  CLOSED: [2021-09-02 Thu 00:14]
+* DONE Write boilerplate for discord bot
+  CLOSED: [2021-09-02 Thu 00:15]
+* DONE Implement: [10/10]
+  CLOSED: [2021-09-15 Wed 20:20]
+** DONE Come up with database schema
+   CLOSED: [2021-09-02 Thu 01:38]
+*** Tables
+    - Servers/Guilds
+      - id:         primary key
+      - guildId:    unique String
+      - Guild Name: String
+      - Role:       unique int
+      - email tail: string
+      - messageId:  unique int
+** DONE Verify email [2/2]
+   CLOSED: [2021-09-13 Mon 21:40]
+*** DONE Listen to messages sent in DM
+    CLOSED: [2021-09-13 Mon 21:40]
+*** DONE Verify that sent message matches the following format
+    CLOSED: [2021-09-13 Mon 21:39]
+    ~-register <email> [server_name]~
+
+    The email used to register for the (optional) server. The email verification depends on which server the user is in/chose to register in.
+** DONE Listen to users adding reactions to specific messages
+   CLOSED: [2021-09-13 Mon 21:38]
+** DONE Allow privileged users to register server
+   CLOSED: [2021-09-13 Mon 21:38]
+** DONE Allow privileged users to define messages to listen to
+   CLOSED: [2021-09-13 Mon 21:38]
+   Privileged users are users who have a specific role, depending on which server it is.
+** DONE Allow privileged users to set membership role
+   CLOSED: [2021-09-13 Mon 21:38]
+** DONE Allow privileged users to set guest role
+   CLOSED: [2021-09-13 Mon 21:38]
+** DONE Allow privileged users to set email tail
+   CLOSED: [2021-09-13 Mon 21:38]
+** DONE Give users roles on successful registration
+   CLOSED: [2021-09-13 Mon 21:39]
+*** DONE Allow privileged users to define membership role and guest role
+    CLOSED: [2021-09-13 Mon 21:39]
+*** DONE Allow users to get a "guest" tag
+    CLOSED: [2021-09-13 Mon 21:39]
+** DONE Check if user already got the role or not before attempting to give them the role or registering them.
+   CLOSED: [2021-09-15 Wed 20:19]
