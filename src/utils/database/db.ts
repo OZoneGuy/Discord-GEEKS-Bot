@@ -334,7 +334,7 @@ export async function reg_email(user_id: string): Promise<boolean | null> {
         return new_member.save()
             .then((_) => { return false })
             .catch((err) => {
-                logger.error(`Failed to register user reaction: ${err}`)
+                logger.error(`Failed to register user email: ${err}`)
                 return null
             })
     }
@@ -365,7 +365,7 @@ export async function reg_guest(user_id: string): Promise<boolean | null> {
                 }
             })
             .catch((err) => {
-                logger.error(`Error when recording registered email for ${user_id}: ${err}`)
+                logger.error(`Error when registering as guest for ${user_id}: ${err}`)
                 return null
             })
     } else {
@@ -378,7 +378,7 @@ export async function reg_guest(user_id: string): Promise<boolean | null> {
         return new_member.save()
             .then((_) => { return false })
             .catch((err) => {
-                logger.error(`Failed to register user reaction: ${err}`)
+                logger.error(`Failed to register as guest for ${user_id}: ${err}`)
                 return null
             })
     }
