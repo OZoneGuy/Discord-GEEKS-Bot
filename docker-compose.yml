@@ -1,8 +1,11 @@
+volumes:
+  data: {}
+
 services:
   mongoDB:
     image: mongo
     volumes:
-      - /data/db
+      - data:/data/db
 
     environment:
         MONGO_INITDB_ROOT_USERNAME: ${MON_USERNAME}
