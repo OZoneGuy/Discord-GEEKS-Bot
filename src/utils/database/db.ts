@@ -302,18 +302,22 @@ export async function add_reaction(user_id: string): Promise<boolean | null | un
  *
  * @return Null if it failed to record email, false if the user didn't give reaction, and true if the user reacted
  */
-export async function reg_email(user_id: string): Promise<boolean | null | undefined> {
+export async function reg_email(user_id: string): Promise<boolean | null> {
     const user = await MemberModel.findById(user_id).exec();
 
     if (user) {
         user.email_ver = true
         return user.save()
             .then((new_doc) => {
-                if (new_doc.email_ver) {
-                    return user.reaction
-                } else {
-                    logger.error(`Failed to update email_ver for ${user_id}`)
-                    return null
+                logger.debug(`Updated ${new_doc}`)
+                switch (new_doc.email_ver) {
+                    case true:
+                    case false:
+                        return user.reaction
+                    case undefined:
+                        logger.debug(`email_ver: ${new_doc.email_ver}`)
+                        logger.error(`Failed to register as guest for ${user_id}`)
+                        return null
                 }
             })
             .catch((err) => {
@@ -351,11 +355,13 @@ export async function reg_guest(user_id: string): Promise<boolean | null> {
         user.email_ver = false
         return user.save()
             .then((new_doc) => {
-                if (new_doc.email_ver) {
-                    return user.reaction
-                } else {
-                    logger.error(`Failed to update email_ver for ${user_id}`)
-                    return null
+                switch (new_doc.email_ver) {
+                    case true:
+                    case false:
+                        return user.reaction
+                    case undefined:
+                        logger.error(`Failed to register as guest for ${user_id}`)
+                        return null
                 }
             })
             .catch((err) => {
