@@ -287,7 +287,7 @@ export async function add_reaction(user_id: string): Promise<boolean | null | un
         })
 
         return new_member.save()
-            .then((res) => { return res.email_ver})
+            .then((res) => { return res.email_ver })
             .catch((err) => {
                 logger.error(`Failed to register user reaction: ${err}`)
                 return null
